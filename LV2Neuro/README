@@ -1,0 +1,13 @@
+Base implementaion heavily inspired from https://github.com/sjaehn/lv2tutorial
+Attemping to maybe create some sort of feed-forward neural network for DSP.
+
+
+Dependencies
+
+    sudo apt-get install build-essential
+    sudo apt-get install pkg-config lv2-dev libsndfile1-dev libx11-dev libcairo2-dev
+
+Build with
+
+    g++ -fvisibility=hidden -fPIC -Wl,-Bstatic -Wl,-Bdynamic -Wl,--as-needed -shared -pthread `pkg-config --cflags lv2` -lm `pkg-config --libs lv2` LV2Neuro.cpp -o LV2Neuro.so
+
