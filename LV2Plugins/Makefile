@@ -6,7 +6,7 @@ RM=rm
 all: LV2Neuro
 
 LV2Neuro:
-	$(CC) $(CC_FLAGS) src/LV2Neuro/*.cpp -o LV2Neuro.lv2/LV2Neuro.so
+	$(CC) $(CC_FLAGS) -O3 src/LV2Neuro/*.cpp -o LV2Neuro.lv2/LV2Neuro.so
 
 install:
 	$(CP) -r *.lv2 /usr/local/lib/lv2/

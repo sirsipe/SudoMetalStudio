@@ -36,7 +36,7 @@ namespace LV2Entry
     static void deactivate (LV2_Handle instance)
     {
         DSP* m = static_cast<DSP*>(instance);
-        if (m) delete m;
+        if (m) m->deactivate ();
     }
 
     template<class DSP>
