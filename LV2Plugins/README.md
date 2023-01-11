@@ -11,3 +11,4 @@ Build with
 LV2Neuro
     
     Future attempt to create LSTM NN based DSP. Currently just a learning playground.
+    
