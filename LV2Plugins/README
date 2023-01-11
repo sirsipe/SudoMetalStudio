@@ -1,0 +1,11 @@
+Dependencies (debian / ubuntu)
+
+    sudo apt-get install build-essential
+    sudo apt-get install pkg-config lv2-dev libsndfile1-dev libx11-dev libcairo2-dev
+
+Build with
+    make
+    make install
+
+
+

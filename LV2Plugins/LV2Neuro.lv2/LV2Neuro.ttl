@@ -6,7 +6,7 @@
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 
 
-<https://github.com/sirsipe/SudoMetalStudio/LV2Neuro> a lv2:Plugin , lv2:DynamicPlugin , doap:Project ;
+<https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/LV2Neuro> a lv2:Plugin , lv2:DynamicPlugin , doap:Project ;
     lv2:binary <LV2Neuro.so> ;
     doap:name "LV2Neuro" ;
     lv2:optionalFeature lv2:hardRTCapable ;
