@@ -16,29 +16,28 @@ You can build and install all plugins with following:
     make
     make install
 
-Or you can build and install individual plugins;
+Or you can build and install individual plugins:
 
     make <name>
     make install-<name> 
 
-Individual plugins can also be uninstalled
+Individual plugins can also be uninstalled:
 
     make uninstall-<name>
 
-For example
-    make SMSAmateurDelay
-    make install-SMSAmateurDelay
-    make uninstall-SMSAmateurDelay
-
 
 # Plugins
-## SMSAmateurDelay
+## SMS Amateur Delay
 
 *LADIES AND GENTLEMEN! The first ever SudoMetalStudio LV2 Plugin has arrived!*
-Thus also it's named *SudoMetalStudio *Amateur* Delay*, as I have absolutely no idea if its implementation is done as it "should". 
+
+Thus also it's named *"SMS **Amateur** Delay"*, as I have absolutely no idea if its implementation is done as it "should". 
 
 It has a variable delay time, variable decay, and varible level. And it's real-time. My amateur opion is that it is as good as it gets.
 
+    make SMSAmateurDelay
+    make install-SMSAmateurDelay
+ 
 ## LV2Neuro
     
 Future attempt to create LSTM NN based DSP. Currently just a learning playground.
