@@ -1,2 +1,2 @@
 .vscode
-LV2Plugins/**/*.so
+LV2Plugins/*.lv2
