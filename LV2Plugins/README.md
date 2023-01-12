@@ -38,6 +38,14 @@ It has a variable delay time, variable decay, and varible level. And it's real-t
     make SMSAmateurDelay
     make install-SMSAmateurDelay
  
+## SMS 440Hz
+
+Want to get constant 440Hz tone? Me neither, but at least we can now.
+
+    make SMS440Hz
+    make install-SMS440Hz
+
+
 ## LV2Neuro
     
 Future attempt to create LSTM NN based DSP. Currently just a learning playground.

@@ -5,7 +5,7 @@ CC_FLAGS=-fvisibility=hidden -Wl,-Bstatic -Wl,-Bdynamic -Wl,--as-needed -fPIC -s
 CP=cp
 RM=rm
 MD=mkdir -p
-all: LV2Neuro SMSAmateurDelay
+all: LV2Neuro SMSAmateurDelay SMS440Hz
 
 install:
 	$(CP) -r *.lv2 $(DESTDIR)/
@@ -26,6 +26,18 @@ install-SMSAmateurDelay:
 	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
 
 uninstall-SMSAmateurDelay:
+	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
+
+
+SMS440Hz:
+	$(MD) $@.lv2
+	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
+	$(CP) src/$@/*.ttl $@.lv2/
+
+install-SMS440Hz:
+	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
+
+uninstall-SMS440Hz:
 	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
 LV2Neuro:
