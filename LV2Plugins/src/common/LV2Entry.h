@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lv2.h"
+#include "lv2/ui/ui.h"
 
 namespace LV2Entry
 {
@@ -50,7 +51,35 @@ namespace LV2Entry
     {
         return nullptr;
     }
+/*
+    template<class UI>
+    static LV2_Handle UIinstantiate (const struct LV2_Descriptor* descriptor, const char* plugin_uri, 
+            const char* bundle_path, LV2UI_Write_Function write_function, LV2UI_Controller controller, 
+            LV2UI_Widget *widget, const LV2_Feature *const *features)
+    {
+        UI* m = new UI(write_function, controller, widget);
+        return m;
+    }
 
+    template<class UI>
+    static LV2_Handle UIcleanup (LV2UI_Handle ui)
+    {
+        UI* m = static_cast<UI*>(ui);
+        if (m) delete m;
+    }
+    
+    template<class UI>
+    static void UIport_event(LV2UI_Handle ui, uint32_t port_index, 
+        uint32_t buffer_size,  uint32_t format, const void *buffer)
+    {
+        UI* m = static_cast<UI*>(ui);
+        if (m) m ->port_event(port_index, buffer_size, format, buffer);
+    }
+
+    static const void* UIextension_data (const char *uri)
+    {
+        return nullptr;
+    }*/
 }
 
 #define EXPORT_PLUGIN_DESCRIPTOR(classname, uri) \
@@ -71,3 +100,21 @@ extern "C" LV2_SYMBOL_EXPORT const LV2_Descriptor* lv2_descriptor (uint32_t inde
     if (index == 0) return &descriptor; \
     else return nullptr; \
 }
+
+/*
+#define EXPORT_PLUGIN_UI_DESCRIPTOR(classname, uri) \
+static LV2UI_Descriptor const uiDescriptior = \
+{ \
+    uri, \
+    LV2Entry::UIinstantiate<classname>, \
+    LV2Entry::UIcleanup<classname>, \
+    LV2Entry::UIport_event<classname>, \
+    LV2Entry::UIextension_data \
+} \
+\
+extern "C" LV2_SYMBOL_EXPORT const LV2UI_Descriptor* lv2ui_descriptor (uint32_t index) \
+{ \
+    if (index == 0) return &uiDescriptior; \
+    else return nullptr; \
+}
+*/
