@@ -5,10 +5,11 @@ CC_FLAGS=-fvisibility=hidden -Wl,-Bstatic -Wl,-Bdynamic -Wl,--as-needed -fPIC -s
 CP=cp
 RM=rm
 MD=mkdir -p
-all: LV2Neuro SMSAmateurDelay SMS440Hz
+all: SMSAmateurDelay SMSStereoDelay SMS440Hz SMSNorthernPerkele SMSWhiteNoise
 
 install:
 	$(CP) -r *.lv2 $(DESTDIR)/
+
 
 # Wildcard (un)install is a bit too loose imo.
 #install-%:
@@ -28,6 +29,16 @@ install-SMSAmateurDelay:
 uninstall-SMSAmateurDelay:
 	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
+SMSStereoDelay:
+	$(MD) $@.lv2
+	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
+	$(CP) src/$@/*.ttl $@.lv2/
+
+install-SMSStereoDelay:
+	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
+
+uninstall-SMSStereoDelay:
+	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
 SMS440Hz:
 	$(MD) $@.lv2
@@ -40,16 +51,40 @@ install-SMS440Hz:
 uninstall-SMS440Hz:
 	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
-LV2Neuro:
+SMSWhiteNoise:
 	$(MD) $@.lv2
 	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
 	$(CP) src/$@/*.ttl $@.lv2/
 
-install-LV2Neuro:
+install-SMSWhiteNoise:
 	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
 
-uninstall-LV2Neuro:
+uninstall-SMSWhiteNoise:
 	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
+
+SMSNorthernPerkele:
+	$(MD) $@.lv2
+	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
+	$(CP) src/$@/*.ttl $@.lv2/
+
+install-SMSNorthernPerkele:
+	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
+
+uninstall-SMSNorthernPerkele:
+	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
+
+
+#LV2Neuro:
+#	$(MD) $@.lv2
+#	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
+#	$(CP) src/$@/*.ttl $@.lv2/
+#
+#install-LV2Neuro:
+#	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
+#
+#uninstall-LV2Neuro:
+#	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
+#
 
 clean:
 	$(RM) -rf *.lv2

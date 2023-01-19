@@ -27,6 +27,25 @@ Individual plugins can also be uninstalled:
 
 
 # Plugins
+## SMS Northern Perkele
+
+**Distortion / Amp! *Rad AF*!** Made to slaugther your enemies, friends, and puppies without mercy.
+
+!! Pair with cabinet, e.g., *LV2 Convolution* with any half-decent impulse response !!
+
+    make SMSNorthernPerkele
+    make install-SMSNorthernPerkele
+
+## SMS Stereo Delay
+
+Based on the world famous *SMS Amateur Delay*, but with stereo output and separate L/R delays.
+
+Protip: *SMS Northern Perkele* + *[some cabinet sim]* + *SMS Stereo Delay* = profit!
+
+    make SMSStereoDelay
+    make install-SMSStereoDelay
+
+
 ## SMS Amateur Delay
 
 *LADIES AND GENTLEMEN! The first ever SudoMetalStudio LV2 Plugin has arrived!*
@@ -45,6 +64,14 @@ Want to get constant 440Hz tone? Me neither, but at least we can now.
     make SMS440Hz
     make install-SMS440Hz
 
+## SMS White Noise
+
+*Hishshhhshshhshhshshshshshhsh.*
+
+I used it to do spectrum analysis of my IIR filter implementations.
+
+    make SMSWhiteNoise
+    make install-SMSWhiteNoise
 
 ## LV2Neuro
     
