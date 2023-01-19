@@ -1,10 +1,10 @@
 #pragma once
 
 template<long MEMSIZE>
-class ConstSizeFloatBuffer
+class RingBuffer
 {
 public:
-    ConstSizeFloatBuffer() : 
+    RingBuffer() : 
         miPosition(0)
     {
 
@@ -29,7 +29,7 @@ public:
 
     }
 
-    const float ReadPrevious(uint32_t iSamplesToPast)
+    const float ReadPrevious(const uint32_t iSamplesToPast)
     {
 
          if (iSamplesToPast >= MEMSIZE)
