@@ -64,7 +64,7 @@ uninstall-SMSWhiteNoise:
 
 SMSNorthernPerkele:
 	$(MD) $@.lv2
-	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
+	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so -lX11
 	$(CP) src/$@/*.ttl $@.lv2/
 
 install-SMSNorthernPerkele:

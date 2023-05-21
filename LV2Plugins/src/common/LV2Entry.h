@@ -2,6 +2,7 @@
 
 #include "lv2.h"
 #include "lv2/ui/ui.h"
+#include <string.h>
 
 namespace LV2Entry
 {
@@ -51,18 +52,18 @@ namespace LV2Entry
     {
         return nullptr;
     }
-/*
+
     template<class UI>
-    static LV2_Handle UIinstantiate (const struct LV2_Descriptor* descriptor, const char* plugin_uri, 
+    static LV2UI_Handle UIinstantiate (const struct LV2UI_Descriptor* descriptor, const char* plugin_uri, 
             const char* bundle_path, LV2UI_Write_Function write_function, LV2UI_Controller controller, 
             LV2UI_Widget *widget, const LV2_Feature *const *features)
     {
-        UI* m = new UI(write_function, controller, widget);
+        UI* m = new UI(write_function, controller, widget, features);
         return m;
     }
 
     template<class UI>
-    static LV2_Handle UIcleanup (LV2UI_Handle ui)
+    static void UIcleanup (LV2UI_Handle ui)
     {
         UI* m = static_cast<UI*>(ui);
         if (m) delete m;
@@ -73,13 +74,44 @@ namespace LV2Entry
         uint32_t buffer_size,  uint32_t format, const void *buffer)
     {
         UI* m = static_cast<UI*>(ui);
-        if (m) m ->port_event(port_index, buffer_size, format, buffer);
+        if (m) m->port_event(port_index, buffer_size, format, buffer);
     }
 
-    static const void* UIextension_data (const char *uri)
+    // LV2 idle interface to host
+    template<class UI>
+    static int ui_idle(LV2UI_Handle handle) 
     {
-        return nullptr;
-    }*/
+        UI* ui = static_cast<UI*>(handle);
+        if (ui)
+            return ui->idle();
+        return 0;
+    }
+
+    // LV2 resize interface to host
+    template<class UI>
+    static int ui_resize(LV2UI_Feature_Handle handle, int w, int h) 
+    {
+        UI* ui = static_cast<UI*>(handle);
+        if (ui) 
+            return ui->resize(w, h);
+        return 0;
+    }
+
+    template<class UI>
+    static const void* UIextension_data_X11 (const char *uri)
+    {
+        static const LV2UI_Idle_Interface idle = { ui_idle<UI> };
+        static const LV2UI_Resize resize = { 0, ui_resize<UI> };
+        if (!strcmp(uri, LV2_UI__idleInterface)) {
+            return &idle;
+        }
+        if (!strcmp(uri, LV2_UI__resize)) {
+            return &resize;
+        }
+        return 0;
+    }
+
+    
 }
 
 #define EXPORT_PLUGIN_DESCRIPTOR(classname, uri) \
@@ -101,20 +133,19 @@ extern "C" LV2_SYMBOL_EXPORT const LV2_Descriptor* lv2_descriptor (uint32_t inde
     else return nullptr; \
 }
 
-/*
-#define EXPORT_PLUGIN_UI_DESCRIPTOR(classname, uri) \
+
+#define EXPORT_PLUGIN_UI_DESCRIPTOR_X11(classname, uri) \
 static LV2UI_Descriptor const uiDescriptior = \
 { \
     uri, \
     LV2Entry::UIinstantiate<classname>, \
     LV2Entry::UIcleanup<classname>, \
     LV2Entry::UIport_event<classname>, \
-    LV2Entry::UIextension_data \
-} \
+    LV2Entry::UIextension_data_X11<classname> \
+}; \
 \
 extern "C" LV2_SYMBOL_EXPORT const LV2UI_Descriptor* lv2ui_descriptor (uint32_t index) \
 { \
     if (index == 0) return &uiDescriptior; \
     else return nullptr; \
 }
-*/
