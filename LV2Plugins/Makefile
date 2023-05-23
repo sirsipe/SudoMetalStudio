@@ -5,6 +5,9 @@ CC_FLAGS=-fvisibility=hidden -Wl,-Bstatic -Wl,-Bdynamic -Wl,--as-needed -fPIC -s
 CP=cp
 RM=rm
 MD=mkdir -p
+CD=cd
+XXD=xxd
+
 all: SMSAmateurDelay SMSStereoDelay SMS440Hz SMSNorthernPerkele SMSWhiteNoise
 
 install:
@@ -63,8 +66,9 @@ uninstall-SMSWhiteNoise:
 	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
 SMSNorthernPerkele:
-	$(MD) $@.lv2
-	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so -lX11
+	$(foreach file, $(filter-out $(wildcard src/$@/res/*.h), $(wildcard src/$@/res/*)), $(CD) $(dir $(file)) && $(XXD) -i $(notdir $(file)) $(notdir $(file)).h;)
+	$(MD) $@.lv2	
+	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so -lX11 -lpng
 	$(CP) src/$@/*.ttl $@.lv2/
 
 install-SMSNorthernPerkele:

@@ -6,8 +6,8 @@ Plugins in this repo are tested with Carla and Ardour unless otherwise stated.
 
 ## Dependencies (debian / ubuntu)
 
-    sudo apt-get install build-essential
-    sudo apt-get install pkg-config lv2-dev libsndfile1-dev libx11-dev libcairo2-dev
+    sudo apt-get install build-essential xxd
+    sudo apt-get install pkg-config lv2-dev libx11-dev libpng-dev
 
 ## Build and install
 
@@ -27,7 +27,7 @@ Individual plugins can also be uninstalled:
 
 
 # Plugins
-## SMS Northern Perkele
+## SMS Northern Perkele (Work in Progress!)
 
 **Distortion / Amp! *Rad AF*!** Made to slaugther your enemies, friends, and puppies without mercy.
 
