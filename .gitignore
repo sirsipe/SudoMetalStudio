@@ -1,2 +1,3 @@
 .vscode
 LV2Plugins/*.lv2
+LV2Plugins/src/*/res/*.h
