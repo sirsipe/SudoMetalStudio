@@ -2,7 +2,7 @@
 
 #include "../common/LV2Entry.h"
 #include "X11/Xlib.h"
-#include <png.h>
+#include "PNGImage.h"
 
 class SMSNorthernPerkeleUI
 {
@@ -17,14 +17,9 @@ public:
     int resize(int w, int h);
 
 private:
-    void load_png_image(FILE* fp, int* pWidth, int* pHeight, png_byte** ppcImage_data);
- 
-private:
-    int miImage_width;
-    int miImage_height;
-    XImage* mpoImage;
-    int miScreen;
-    //bool mbHovering;
+   
+    std::shared_ptr<PNGImage> mpoGUI;
+   
     Display* mpoDisplay;
     Window moWnd;
 
