@@ -73,6 +73,14 @@ I used it to do spectrum analysis of my IIR filter implementations.
     make SMSWhiteNoise
     make install-SMSWhiteNoise
 
+## SMS Switch
+
+Simple 1-channel switch to either bypass or cut the signal. Extremely usefull when mapped to extenal MIDI controller!
+For example: Use a midi footswitch for "push-to-talk" setup in Carla ;) 
+
+    make SMSSwitch
+    make install-SMSSwitch
+
 ## LV2Neuro
     
 Future attempt to create LSTM NN based DSP. Currently just a learning playground.

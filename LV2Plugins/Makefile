@@ -8,7 +8,7 @@ MD=mkdir -p
 CD=cd
 XXD=xxd
 
-all: SMSAmateurDelay SMSStereoDelay SMS440Hz SMSNorthernPerkele SMSWhiteNoise
+all: SMSAmateurDelay SMSStereoDelay SMS440Hz SMSNorthernPerkele SMSWhiteNoise SMSSwitch
 
 install:
 	$(CP) -r *.lv2 $(DESTDIR)/
@@ -52,6 +52,17 @@ install-SMS440Hz:
 	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
 
 uninstall-SMS440Hz:
+	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
+
+SMSSwitch:
+	$(MD) $@.lv2
+	$(CC) $(CC_FLAGS) -O3 src/$@/*.cpp -o $@.lv2/$@.so
+	$(CP) src/$@/*.ttl $@.lv2/
+
+install-SMSSwitch:
+	$(CP) -r $(subst install-,,$@).lv2 $(DESTDIR)/
+
+uninstall-SMSSwitch:
 	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
 SMSWhiteNoise:
