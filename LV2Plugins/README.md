@@ -4,27 +4,43 @@
 
 ## Quick steps:
 
-1. Install required tools/libries and clone the repo
+### 1. Install required tools/libries and clone the repo
 
     sudo apt-get install git build-essential pkg-config lv2-dev
     git clone https://github.com/sirsipe/SudoMetalStudio
 
-2. Come up with a name for you plugin. It has to be simple ascii letters, without spaces, and it must not start with a number. For example: *MyAmazingPlugin* 
+
+### 2. Come up with a name for you plugin
+
+It has to be simple ascii letters, without spaces, and it must not start with a number. 
+
+For example: **MyAmazingPlugin**
  
-3. Initialize new codebase for your plugin. This process is automated based on the name you chose and a ready-made template:
+
+### 3. Initialize new codebase for your plugin. This process is automated based on the name you chose and a ready-made template:
 
     cd SudoMetalStudio/LV2Plugins
     make MYODP-Create-MyAmazingPlugin
 
 Your plugin is now created, but not yet installed.
 
-4. Investigate the *src/MyAmazingPlugin/MyAmazingPlugin.cpp* file and especially the **MyAmazingPlugin::run** function. If you need more inputs/outputs, ports are defined in *src/MyAmazingPlugin/MyAmazingPlugin.ttl* and **MyAmazingPlugin::connectPort** function must handle connection to them.
 
-5. Build and install *MyAmazingPlugin*
+### 4. Investigate the *src/MyAmazingPlugin/MyAmazingPlugin.cpp* file
+
+...and especially the **MyAmazingPlugin::run** function.
+
+If you need more inputs/outputs, ports are defined in *src/MyAmazingPlugin/MyAmazingPlugin.ttl* and **MyAmazingPlugin::connectPort** function must handle connection to them.
+
+
+### 5. Build and install *MyAmazingPlugin*
 
     make MYODP-BuildAndInstall-MyAmazingPlugin
 
-6. GoTo 4.
+
+## 6. GoTo 4 
+
+*indefinitely*
+
 
 # General
 
