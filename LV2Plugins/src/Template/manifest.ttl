@@ -1,0 +1,6 @@
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/MYODP/REPLACE_ME> a lv2:Plugin ;
+    lv2:binary <REPLACE_ME.so> ;
+    rdfs:seeAlso <REPLACE_ME.ttl> .

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "lv2.h"
+#ifndef NO_LV2_UI_HEADER
 #include "lv2/ui/ui.h"
+#endif
 #include <string.h>
 
 namespace LV2Entry
@@ -53,6 +55,7 @@ namespace LV2Entry
         return nullptr;
     }
 
+#ifndef NO_LV2_UI_HEADER
     template<class UI>
     static LV2UI_Handle UIinstantiate (const struct LV2UI_Descriptor* descriptor, const char* plugin_uri, 
             const char* bundle_path, LV2UI_Write_Function write_function, LV2UI_Controller controller, 
@@ -110,8 +113,8 @@ namespace LV2Entry
         }
         return 0;
     }
+#endif
 
-    
 }
 
 #define EXPORT_PLUGIN_DESCRIPTOR(classname, uri) \
@@ -133,7 +136,7 @@ extern "C" LV2_SYMBOL_EXPORT const LV2_Descriptor* lv2_descriptor (uint32_t inde
     else return nullptr; \
 }
 
-
+#ifndef NO_LV2_UI_HEADER
 #define EXPORT_PLUGIN_UI_DESCRIPTOR_X11(classname, uri) \
 static LV2UI_Descriptor const uiDescriptior = \
 { \
@@ -149,3 +152,4 @@ extern "C" LV2_SYMBOL_EXPORT const LV2UI_Descriptor* lv2ui_descriptor (uint32_t 
     if (index == 0) return &uiDescriptior; \
     else return nullptr; \
 }
+#endif

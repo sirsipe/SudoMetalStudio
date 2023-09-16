@@ -7,6 +7,10 @@ RM=rm
 MD=mkdir -p
 CD=cd
 XXD=xxd
+GREP=grep
+XARGS=xargs
+SED=sed
+MV=mv
 
 all: SMSAmateurDelay SMSStereoDelay SMS440Hz SMSNorthernPerkele SMSWhiteNoise SMSSwitch
 
@@ -20,6 +24,19 @@ install:
 #
 #uninstall-%:
 #	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
+
+MYODP-Create-%:
+	$(CP) -r src/Template src/$(subst MYODP-Create-,,$@)
+	$(GREP) -RiIl 'REPLACE_ME' src/$(subst MYODP-Create-,,$@)/ | $(XARGS) $(SED) -i 's/REPLACE_ME/$(subst MYODP-Create-,,$@)/g'
+	$(MV) src/$(subst MYODP-Create-,,$@)/REPLACE_ME.cpp src/$(subst MYODP-Create-,,$@)/$(subst MYODP-Create-,,$@).cpp
+	$(MV) src/$(subst MYODP-Create-,,$@)/REPLACE_ME.h src/$(subst MYODP-Create-,,$@)/$(subst MYODP-Create-,,$@).h
+	$(MV) src/$(subst MYODP-Create-,,$@)/REPLACE_ME.ttl src/$(subst MYODP-Create-,,$@)/$(subst MYODP-Create-,,$@).ttl
+	 
+MYODP-BuildAndInstall-%:
+	$(MD) ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2
+	$(CC) $(CC_FLAGS) -O3 src/$(subst MYODP-BuildAndInstall-,,$@)/*.cpp -o ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2/$(subst MYODP-BuildAndInstall-,,$@).so
+	$(CP) src/$(subst MYODP-BuildAndInstall-,,$@)/*.ttl ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2/
+
 
 SMSAmateurDelay:
 	$(MD) $@.lv2

@@ -10,9 +10,9 @@
     foaf:name "SudoMetalStudio" ;
     foaf:homepage "https://github.com/sirsipe/SudoMetalStudio" .
 
-<https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/SMSSwitch> a lv2:MixerPlugin ;
-    lv2:project <https://github.com/sirsipe/SudoMetalStudio> ;
-    doap:name "SMS Switch" ;
+<https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/MYODP/REPLACE_ME> a lv2:Plugin ;
+    lv2:project <https://github.com/sirsipe/SudoMetalStudio/MYODP> ;
+    doap:name "REPLACE_ME" ;
     lv2:optionalFeature lv2:hardRTCapable ;
     lv2:minorVersion 1 ;
     lv2:microVersion 0 ;
