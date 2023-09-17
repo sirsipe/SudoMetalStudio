@@ -2,7 +2,23 @@
 
 *MYODP* is a "template framework" that works as extremely simple entry point for entry level LV2 Plugin development. Simply follow the quick steps below and you will have your very own plugin running in no time.
 
-## Quick steps:
+## Quick steps
+
+To create a plugin named **MyAmazingPlugin** *(it has to be simple ascii letters, without spaces, and it must not start with a number)*.
+
+    sudo apt-get install git build-essential pkg-config lv2-dev
+    git clone https://github.com/sirsipe/SudoMetalStudio
+    cd SudoMetalStudio/LV2Plugins
+    make MYODP-Create-MyAmazingPlugin
+    make MYODP-BuildAndInstall-MyAmazingPlugin
+
+And you are done! You should find *MyAmazingPlugin* e.g., from Carla's or Ardour's plugins listing. Now, open **src/MyAmazingPlugin/MyAmazingPlugin.cpp** and look at **MyAmazingPlugin::run** function. Make your changes for the signal processing, and apply them with
+
+    make MYODP-BuildAndInstall-MyAmazingPlugin
+
+Then restart the plugin host application to test your changes.
+
+## Quick steps Explained
 
 ### 1. Install required tools/libries and clone the repo
 
