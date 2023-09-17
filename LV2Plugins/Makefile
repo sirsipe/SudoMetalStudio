@@ -1,3 +1,4 @@
+MYODP_DESTDIR=~/.lv2
 DESTDIR=/usr/local/lib/lv2
 
 CC=g++
@@ -35,8 +36,10 @@ MYODP-Create-%:
 MYODP-BuildAndInstall-%:
 	$(MD) ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2
 	$(CC) $(CC_FLAGS) -O3 src/$(subst MYODP-BuildAndInstall-,,$@)/*.cpp -o ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2/$(subst MYODP-BuildAndInstall-,,$@).so
-	$(CP) src/$(subst MYODP-BuildAndInstall-,,$@)/*.ttl ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2/
+	$(CP) src/$(subst MYODP-BuildAndInstall-,,$@)/*.ttl $(MYODP_DESTDIR)/$(subst MYODP-BuildAndInstall-,,$@).lv2/
 
+MYODP-Remove-%:
+	$(RM) -rf $(MYODP_DESTDIR)/$(subst MYODP-Remove-,,$@).lv2/
 
 SMSAmateurDelay:
 	$(MD) $@.lv2
