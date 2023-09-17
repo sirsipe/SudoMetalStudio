@@ -2,6 +2,8 @@
 
 *MYODP* is a "template framework" that works as extremely simple entry point for entry level LV2 Plugin development. Simply follow the quick steps below and you will have your very own plugin running in no time.
 
+My YouTube channel is a good place to learn more: https://www.youtube.com/@SudoMetalStudio
+
 ## Quick steps
 
 To create a plugin named **MyAmazingPlugin** *(it has to be simple ascii letters, without spaces, and it must not start with a number)*.
