@@ -14,7 +14,9 @@ To create a plugin named **MyAmazingPlugin** *(it has to be simple ascii letters
     make MYODP-Create-MyAmazingPlugin
     make MYODP-BuildAndInstall-MyAmazingPlugin
 
-And you are done! You should find *MyAmazingPlugin* e.g., from Carla's or Ardour's plugins listing. Now, open **src/MyAmazingPlugin/MyAmazingPlugin.cpp** and look at **MyAmazingPlugin::run** function. Make your changes for the signal processing, and apply them with
+And you are done! You should find *MyAmazingPlugin* e.g., from Carla's and Ardour's plugins listing (it's installed to **~/.lv2/**). 
+
+Now, open **src/MyAmazingPlugin/MyAmazingPlugin.cpp** with your favourite code editor, and take a look at **MyAmazingPlugin::run** function. Make your changes for the signal processing, and apply them with
 
     make MYODP-BuildAndInstall-MyAmazingPlugin
 
