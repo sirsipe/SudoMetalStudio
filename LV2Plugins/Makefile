@@ -26,20 +26,46 @@ install:
 #uninstall-%:
 #	$(RM) -rf $(DESTDIR)/$(subst uninstall-,,$@).lv2
 
+MYODP-Create-:
+	@echo 
+	@echo "Usage: MYODP-Create-<NameOfYourPlugin>"
+	@echo "E.g.,"
+	@echo
+	@echo "make MYODP-Create-MyAmazingPlugin"
+	@echo
+	@echo "Use only ascii letters (and numbers) in your plugin name but DO NOT start with a number"
+	@echo
+
 MYODP-Create-%:
 	$(CP) -r src/Template src/$(subst MYODP-Create-,,$@)
 	$(GREP) -RiIl 'REPLACE_ME' src/$(subst MYODP-Create-,,$@)/ | $(XARGS) $(SED) -i 's/REPLACE_ME/$(subst MYODP-Create-,,$@)/g'
 	$(MV) src/$(subst MYODP-Create-,,$@)/REPLACE_ME.cpp src/$(subst MYODP-Create-,,$@)/$(subst MYODP-Create-,,$@).cpp
 	$(MV) src/$(subst MYODP-Create-,,$@)/REPLACE_ME.h src/$(subst MYODP-Create-,,$@)/$(subst MYODP-Create-,,$@).h
 	$(MV) src/$(subst MYODP-Create-,,$@)/REPLACE_ME.ttl src/$(subst MYODP-Create-,,$@)/$(subst MYODP-Create-,,$@).ttl
-	 
+
+MYODP-BuildAndInstall-:
+	@echo
+	@echo "Usage: MYODP-BuildAndInstall-<NameOfYourPlugin>"
+	@echo "E.g.,"
+	@echo
+	@echo "make MYODP-BuildAndInstall-MyAmazingPlugin"
+	@echo
+
 MYODP-BuildAndInstall-%:
 	$(MD) ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2
 	$(CC) $(CC_FLAGS) -O3 src/$(subst MYODP-BuildAndInstall-,,$@)/*.cpp -o ~/.lv2/$(subst MYODP-BuildAndInstall-,,$@).lv2/$(subst MYODP-BuildAndInstall-,,$@).so
 	$(CP) src/$(subst MYODP-BuildAndInstall-,,$@)/*.ttl $(MYODP_DESTDIR)/$(subst MYODP-BuildAndInstall-,,$@).lv2/
 
-MYODP-Remove-%:
-	$(RM) -rf $(MYODP_DESTDIR)/$(subst MYODP-Remove-,,$@).lv2/
+MYODP-Uninstall-:
+	@echo
+	@echo "Usage: MYODP-Uninstall-<NameOfYourPlugin>"
+	@echo "E.g.,"
+	@echo
+	@echo "make MYODP-Uninstall-MyAmazingPlugin"
+	@echo
+
+MYODP-Uninstall-%:
+	$(RM) -rf $(MYODP_DESTDIR)/$(subst MYODP-Uninstall-,,$@).lv2/
 
 SMSAmateurDelay:
 	$(MD) $@.lv2

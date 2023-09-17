@@ -18,6 +18,7 @@ private:
     float* mpfAudio_in_buffer;    
     float* mpfAudio_out_buffer;
     float* mpfEnableValue;
+    float* mpfVolume;
     double mdSampleRate;
 };
 

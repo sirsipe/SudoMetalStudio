@@ -10,7 +10,7 @@
     foaf:name "SudoMetalStudio" ;
     foaf:homepage "https://github.com/sirsipe/SudoMetalStudio" .
 
-<https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/MYODP/REPLACE_ME> a lv2:Plugin ;
+<https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/MYODP/REPLACE_ME> a lv2:AmplifierPlugin ;
     lv2:project <https://github.com/sirsipe/SudoMetalStudio/MYODP> ;
     doap:name "REPLACE_ME" ;
     lv2:optionalFeature lv2:hardRTCapable ;
@@ -42,4 +42,13 @@
             lv2:maximum 1.0 ;
             lv2:designation lv2:enabled;
             lv2:portProperty lv2:toggled;
+        ] ,
+        [
+            a lv2:InputPort , lv2:ControlPort ;
+            lv2:index 3 ;
+            lv2:symbol "volume" ;
+            lv2:name "Volume" ;
+            lv2:default 1.0 ;
+            lv2:minimum 0.0 ;
+            lv2:maximum 2.0 ;
         ] .

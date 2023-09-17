@@ -8,7 +8,8 @@ REPLACE_ME::REPLACE_ME (const double sample_rate) :
     mdSampleRate(sample_rate),
     mpfAudio_in_buffer(nullptr),
     mpfAudio_out_buffer(nullptr),
-    mpfEnableValue(nullptr)
+    mpfEnableValue(nullptr),
+    mpfVolume(nullptr)
 {
     
 }
@@ -28,6 +29,9 @@ void REPLACE_ME::connectPort (const uint32_t port, void* data_location)
         break;
     case 2:
         mpfEnableValue = static_cast<float*>(data_location);
+        break;
+    case 3:
+        mpfVolume = static_cast<float*>(data_location);
         break;
     }
 
@@ -50,18 +54,19 @@ void REPLACE_ME::deactivate ()
 void REPLACE_ME::run (const uint32_t sample_count)
 {
     // Check connection validity.
-    if (!mpfAudio_out_buffer || !mpfAudio_in_buffer || !mpfEnableValue) 
+    if (!mpfAudio_out_buffer || !mpfAudio_in_buffer || !mpfEnableValue || !mpfVolume) 
         return;
 
     // The sample rate is stored in mdSampleRate variable. 
     // sample_count indicates how many samples there are in the input buffer(s). 
 
     // Simply pass the signal from input buffer to output
-    // buffer in case the enable is non-zero. Else pass 0 for output.
+    // buffer multiplied by the volume factor, in case the enable is non-zero. 
+    // Else pass 0 for output.
     for (uint32_t i = 0; i < sample_count; ++i)
     {
         if (*mpfEnableValue)
-            mpfAudio_out_buffer[i] = mpfAudio_in_buffer[i];
+            mpfAudio_out_buffer[i] = mpfAudio_in_buffer[i] * (*mpfVolume);
         else
             mpfAudio_out_buffer[i] = 0;
     }
