@@ -46,13 +46,15 @@ void REPLACE_ME::deactivate ()
 }
 
 /// @brief This is the DSP function. It must be fast and thus not allowed to e.g. allocate memory.
-/// @param sample_count 
+/// @param sample_count How many samples there are in the buffer. THIS IS NOT ALWAYS THE SAME AS BUFFER SIZE SETTING!
 void REPLACE_ME::run (const uint32_t sample_count)
 {
     // Check connection validity.
     if (!mpfAudio_out_buffer || !mpfAudio_in_buffer || !mpfEnableValue) 
         return;
 
+    // The sample rate is stored in mdSampleRate variable. 
+    // sample_count indicates how many samples there are in the input buffer(s). 
 
     // Simply pass the signal from input buffer to output
     // buffer in case the enable is non-zero. Else pass 0 for output.
