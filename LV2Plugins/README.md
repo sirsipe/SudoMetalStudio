@@ -56,10 +56,15 @@ If you need more inputs/outputs, ports are defined in *src/MyAmazingPlugin/MyAma
 
     make MYODP-BuildAndInstall-MyAmazingPlugin
 
+This installs the plugin to **~/.lv2/** -folder which is often automatically set to plugin paths of different applications. This is user specific folder so the plugin is only installed for the current user.
 
 ## 6. GoTo 4 
 
 *indefinitely*
+
+## 7. To remove the plugin...
+
+    make MYODP-Remove-MyAmazingPlugin
 
 
 # General
