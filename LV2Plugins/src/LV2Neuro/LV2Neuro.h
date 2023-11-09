@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../common/LV2Entry.h"
-#include "../common/RingBuffer.h"
 
 #ifndef DSP_BUFFER_MEMORY
 #define DSP_BUFFER_MEMORY 480000    //can fit 10s with 48kHz sample rate 
@@ -25,7 +24,6 @@ private:
     float* mpfLevelValue;
     double mdSample_rate;
 
-    RingBuffer<DSP_BUFFER_MEMORY> moBufferMemory;
 };
 
 EXPORT_PLUGIN_DESCRIPTOR(LV2Neuro, "https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/LV2Neuro")
