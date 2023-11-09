@@ -83,4 +83,14 @@
             lv2:default 0.6 ;
             lv2:minimum 0.0 ;
             lv2:maximum 0.999 ;
+        ],
+        [
+            a lv2:InputPort , lv2:ControlPort ;
+            lv2:index 8 ;
+            lv2:symbol "decay_count" ;
+            lv2:name "Decay Count" ;
+            lv2:default 10.0 ;
+            lv2:minimum 0.0 ;
+            lv2:maximum 30.0 ;
+            lv2:portProperty lv2:integer ;
         ] .

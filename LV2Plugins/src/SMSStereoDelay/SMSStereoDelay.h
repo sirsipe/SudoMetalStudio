@@ -3,10 +3,6 @@
 #include "../common/LV2Entry.h"
 #include "../common/RingBuffer.h"
 
-#ifndef DSP_BUFFER_MEMORY
-#define DSP_BUFFER_MEMORY 480000    //can fit 10s with 48kHz sample rate 
-#endif
-
 /* class definition */
 class SMSStereoDelay 
 {
@@ -28,11 +24,11 @@ private:
     float* mpfDelayLValue;
     float* mpfDelayRValue;
     float* mpfDecayValue;
-    
+    float* mpfDecayCount;
     
     double mdSample_rate;
 
-    RingBuffer<DSP_BUFFER_MEMORY> moBufferMemory;
+    RingBuffer moRingBuffer;
 };
 
 EXPORT_PLUGIN_DESCRIPTOR(SMSStereoDelay, "https://github.com/sirsipe/SudoMetalStudio/LV2Plugins/SMSStereoDelay")

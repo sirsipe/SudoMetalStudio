@@ -1,48 +1,98 @@
 #pragma once
 
-template<long MEMSIZE>
+#include <cstddef>
+
 class RingBuffer
 {
 public:
-    RingBuffer() : 
-        miPosition(0)
-    {
 
+    /// @brief Constructor. Allocates the underlying buffer to the heap.
+    /// @param lCapasity Capasity of the buffer
+    RingBuffer(const size_t lCapasity) : 
+        mpaBuffer(nullptr),
+        mlCapasity(lCapasity),
+        mlCurrentIndex(0),
+        mfZero(0)
+    {
+        if (mlCapasity)
+        {   
+            mpaBuffer = new float[mlCapasity]; 
+            Clear();
+        }
     }
 
+    /// @brief Destructor; deletes the underlying buffer.
+    ~RingBuffer()
+    {
+        if (mpaBuffer)
+        {
+            delete[] mpaBuffer;
+            mpaBuffer = nullptr;
+        }
+    }
+
+    /// @brief Sets the buffer to all zeros.
     void Clear()
     {
-        miPosition = 0;
-        for(int i = 0; i < MEMSIZE; i++)
-            mArray[i] = 0.0f;
-    }
-
-    void Push(const float* data, const uint32_t iLen)
-    {
-        for (uint32_t i = 0; i < iLen; i++)
+        if (mpaBuffer)
         {
-            mArray[miPosition] = data[i];
-            miPosition++;
-            if (miPosition >= MEMSIZE)
-                miPosition = 0;
+            for(size_t i = 0; i < mlCapasity; i++)
+            {
+                mpaBuffer[i] = mfZero;
+            }
         }
-
     }
 
-    const float ReadPrevious(const uint32_t iSamplesToPast)
+    /// @brief Store array to the buffer.
+    /// @param paSamples First element of the array which values are copied to the buffer
+    /// @param lCount Amount of elements in the array
+    void Push(const float* paSamples, const size_t lCount)
+    {
+        if (!mpaBuffer || !paSamples)
+            return;
+
+        for(size_t i = 0; i < lCount; i++)
+        {
+            mpaBuffer[mlCurrentIndex] = paSamples[i];
+            mlCurrentIndex++;
+            
+            if (mlCurrentIndex == mlCapasity)
+                mlCurrentIndex = 0;
+        }
+    }
+
+    /// @brief Capacity of the buffer
+    /// @return Capacity of the buffer
+    constexpr size_t Capasity() const
+    {
+        return mlCapasity;
+    }
+
+    /// @brief Accessor for the buffer
+    /// @param lIndex zero = last pushed value. Larger the index, older the value. Asking over capasity returns zero.
+    /// @return constant reference to the buffer value; zero if
+    const float& operator[](const size_t lIndex) const
     {
 
-         if (iSamplesToPast >= MEMSIZE)
-            return 0;      
+        if (!mpaBuffer || lIndex >= mlCapasity) 
+            return mfZero;
+        
+        if (lIndex > mlCurrentIndex)
+            return mpaBuffer[mlCurrentIndex + mlCapasity - lIndex];
 
-        int32_t iPos = (int64_t)miPosition - (int64_t)(iSamplesToPast);
-        while(iPos < 0)
-            iPos += MEMSIZE;
-
-        return mArray[iPos];
+        return mpaBuffer[mlCurrentIndex - lIndex];
     }
+    
 
 private:
-    float mArray[MEMSIZE] = { 0.0f };
-    uint32_t miPosition;
+    // Hide default constructor
+    RingBuffer();
+
+private:
+
+    const float mfZero;
+    const size_t mlCapasity;
+    float* mpaBuffer;
+    size_t mlCurrentIndex;
+
 };

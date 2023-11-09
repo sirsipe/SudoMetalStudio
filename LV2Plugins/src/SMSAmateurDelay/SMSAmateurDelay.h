@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/LV2Entry.h"
-#include "../common/RingBuffer.h"
+#include "../common/RingBuffer_old.h"
 
 #ifndef DSP_BUFFER_MEMORY
 #define DSP_BUFFER_MEMORY 480000    //can fit 10s with 48kHz sample rate 

@@ -9,9 +9,10 @@ SMSStereoDelay::SMSStereoDelay (const double sample_rate) :
     mpfDelayLValue(nullptr),
     mpfDelayRValue(nullptr),
     mpfDecayValue(nullptr), 
-    mdSample_rate(sample_rate)
+    mpfDecayCount(nullptr),
+    mdSample_rate(sample_rate),
+    moRingBuffer(30 * sample_rate)
 {
-
 }
 
 void SMSStereoDelay::connectPort (const uint32_t port, void* data_location)
@@ -43,6 +44,9 @@ void SMSStereoDelay::connectPort (const uint32_t port, void* data_location)
     case 7:
         mpfDecayValue = static_cast<float*>(data_location);
         break;
+    case 8:
+        mpfDecayCount = static_cast<float*>(data_location);
+        break;
     default:
         break;
     }
@@ -51,7 +55,7 @@ void SMSStereoDelay::connectPort (const uint32_t port, void* data_location)
 
 void SMSStereoDelay::activate ()
 {
-    moBufferMemory.Clear();
+    moRingBuffer.Clear();
 }
 
 void SMSStereoDelay::deactivate ()
@@ -63,8 +67,9 @@ void SMSStereoDelay::run (const uint32_t sample_count)
 {
     // Check connection validity.
     if (!sample_count || !mpfAudio_in_buffer || !mpfAudio_out_buffer_l || !mpfAudio_out_buffer_r
-        || !mpfEnableValue || !mpfLevelValue || !mpfDelayLValue || !mpfDelayRValue || !mpfDecayValue) 
+        || !mpfEnableValue || !mpfLevelValue || !mpfDelayLValue || !mpfDelayRValue || !mpfDecayValue || !mpfDecayCount) 
         return;
+
 
     // Delay is given in seconds, so calculate 
     // corresponding sample gap based on sample rate.
@@ -73,19 +78,23 @@ void SMSStereoDelay::run (const uint32_t sample_count)
 
     for (uint32_t i = 0; i < sample_count; i++)
     {
+
         // Pass the dry signal
         mpfAudio_out_buffer_l[i] = mpfAudio_in_buffer[i]; 
         mpfAudio_out_buffer_r[i] = mpfAudio_in_buffer[i]; 
 
         if (*mpfEnableValue) // Check enabled.
         {
+
+            size_t curIndex = sample_count - 1 - i;
+
             // Add delay with 10 step decay from the buffer.
             float decay =  *mpfDecayValue;
-            for (uint32_t j = 0; j < 10; j++)
+            for (uint32_t j = 0; j < *mpfDecayCount; j++)
             {
             
-                mpfAudio_out_buffer_l[i] += *mpfLevelValue * decay * moBufferMemory.ReadPrevious(delayGap_l * (j + 1) - i);     
-                mpfAudio_out_buffer_r[i] += *mpfLevelValue * decay * moBufferMemory.ReadPrevious(delayGap_r * (j + 1) - i);     
+                mpfAudio_out_buffer_l[i] += *mpfLevelValue * decay * moRingBuffer[curIndex + delayGap_l * (j + 1)];     
+                mpfAudio_out_buffer_r[i] += *mpfLevelValue * decay * moRingBuffer[curIndex + delayGap_r * (j + 1)];    
             
                 decay *= decay;
             }
@@ -93,6 +102,7 @@ void SMSStereoDelay::run (const uint32_t sample_count)
     }
 
     // Store new samples to the buffer.
-    moBufferMemory.Push(mpfAudio_in_buffer, sample_count);
+    moRingBuffer.Push(mpfAudio_in_buffer, sample_count);
+    
 }
 
