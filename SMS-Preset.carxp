@@ -1,0 +1,440 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE CARLA-PROJECT>
+<CARLA-PROJECT VERSION='2.4'>
+ <EngineSettings>
+  <ForceStereo>false</ForceStereo>
+  <PreferPluginBridges>false</PreferPluginBridges>
+  <PreferUiBridges>true</PreferUiBridges>
+  <UIsAlwaysOnTop>false</UIsAlwaysOnTop>
+  <MaxParameters>200</MaxParameters>
+  <UIBridgesTimeout>4000</UIBridgesTimeout>
+ </EngineSettings>
+
+ <Transport>
+  <BeatsPerMinute>120</BeatsPerMinute>
+ </Transport>
+
+ <!-- ZamGate -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>ZamGate</Name>
+   <URI>urn:zamaudio:ZamGate</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x4</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Attack</Name>
+    <Symbol>att</Symbol>
+    <Value>50</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Release</Name>
+    <Symbol>rel</Symbol>
+    <Value>100</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Threshold</Name>
+    <Symbol>thr</Symbol>
+    <Value>-60</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Makeup</Name>
+    <Symbol>mak</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>Sidechain</Name>
+    <Symbol>sidechain</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>Max gate close</Name>
+    <Symbol>close</Symbol>
+    <Value>-50</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Mode open/shut</Name>
+    <Symbol>mode</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- Neural Amp Modeler -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>Neural Amp Modeler</Name>
+   <URI>http://github.com/mikeoliphant/neural-amp-modeler-lv2</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Input Lvl</Name>
+    <Symbol>input_level</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Output Lvl</Name>
+    <Symbol>output_level</Symbol>
+    <Value>-11.2196073532104</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Path</Type>
+    <Key>http://github.com/mikeoliphant/neural-amp-modeler-lv2#model</Key>
+    <Value>Helga B 6505+ Red ch - MXR Drive V2.nam</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- LV2 Convolution Mono=&gt;Stereo -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>LV2 Convolution Mono=&gt;Stereo</Name>
+   <URI>http://gareus.org/oss/lv2/convoLV2#MonoToStereo</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Gain</Name>
+    <Symbol>gain</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#String</Type>
+    <Key>http://gareus.org/oss/lv2/convoLV2#state</Key>
+    <Value>
+convolution.ir.gain.0=5.000000e-01
+convolution.ir.delay.0=0
+convolution.ir.channel.0=1
+convolution.source.0=1
+convolution.output.0=1
+convolution.ir.gain.1=5.000000e-01
+convolution.ir.delay.1=0
+convolution.ir.channel.1=2
+convolution.source.1=1
+convolution.output.1=2
+convolution.ir.gain.2=5.000000e-01
+convolution.ir.delay.2=0
+convolution.ir.channel.2=0
+convolution.source.2=0
+convolution.output.2=0
+convolution.ir.gain.3=5.000000e-01
+convolution.ir.delay.3=0
+convolution.ir.channel.3=0
+convolution.source.3=0
+convolution.output.3=0
+convolution.maxsize=1048576
+
+    </Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Path</Type>
+    <Key>http://gareus.org/oss/lv2/convoLV2#impulse</Key>
+    <Value>GuitarHack Original Edge.wav</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- GxChorus-Stereo -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>GxChorus-Stereo</Name>
+   <URI>http://guitarix.sourceforge.net/plugins/gx_chorus_stereo#_chorus_stereo</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Level</Name>
+    <Symbol>level</Symbol>
+    <Value>0.209999993443489</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Delay</Name>
+    <Symbol>delay</Symbol>
+    <Value>0.0199999995529652</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Depth</Name>
+    <Symbol>depth</Symbol>
+    <Value>0.0199999995529652</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Freq</Name>
+    <Symbol>freq</Symbol>
+    <Value>3</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>BYPASS</Name>
+    <Symbol>BYPASS</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- Gxdigital_delay_st -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>Gxdigital_delay_st</Name>
+   <URI>http://guitarix.sourceforge.net/plugins/gx_digital_delay_st_#_digital_delay_st_</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>BPM</Name>
+    <Symbol>BPM</Symbol>
+    <Value>120</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>FEEDBACK</Name>
+    <Symbol>FEEDBACK</Symbol>
+    <Value>50</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>GAIN</Name>
+    <Symbol>GAIN</Symbol>
+    <Value>54</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>HIGHPASS</Name>
+    <Symbol>HIGHPASS</Symbol>
+    <Value>120</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>HOWPASS</Name>
+    <Symbol>HOWPASS</Symbol>
+    <Value>12000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>LEVEL</Name>
+    <Symbol>LEVEL</Symbol>
+    <Value>26</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>MODE</Name>
+    <Symbol>MODE</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>NOTES</Name>
+    <Symbol>NOTES</Symbol>
+    <Value>4</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>SYNC</Name>
+    <Symbol>SYNC</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>BYPASS</Name>
+    <Symbol>BYPASS</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- GxReverb-Stereo -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>GxReverb-Stereo</Name>
+   <URI>http://guitarix.sourceforge.net/plugins/gx_reverb_stereo#_reverb_stereo</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Dry/Wet</Name>
+    <Symbol>dry_wet</Symbol>
+    <Value>24</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>LFO</Name>
+    <Symbol>lfo</Symbol>
+    <Value>0.200000002980232</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Roomsize</Name>
+    <Symbol>roomsize</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Damp</Name>
+    <Symbol>damp</Symbol>
+    <Value>0.200000002980232</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>Mode</Name>
+    <Symbol>mode</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <ExternalPatchbay>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>ZamGate:Audio Input 1</Target>
+  </Connection>
+  <Connection>
+   <Source>Neural Amp Modeler:Output</Source>
+   <Target>LV2 Convolution Mono=&gt;Stereo:In</Target>
+  </Connection>
+  <Connection>
+   <Source>LV2 Convolution Mono=&gt;Stereo:OutL</Source>
+   <Target>GxChorus-Stereo:In</Target>
+  </Connection>
+  <Connection>
+   <Source>LV2 Convolution Mono=&gt;Stereo:OutR</Source>
+   <Target>GxChorus-Stereo:In1</Target>
+  </Connection>
+  <Connection>
+   <Source>GxChorus-Stereo:Out</Source>
+   <Target>Gxdigital_delay_st:In</Target>
+  </Connection>
+  <Connection>
+   <Source>GxChorus-Stereo:Out1</Source>
+   <Target>Gxdigital_delay_st:In1</Target>
+  </Connection>
+  <Connection>
+   <Source>Gxdigital_delay_st:Out</Source>
+   <Target>GxReverb-Stereo:In</Target>
+  </Connection>
+  <Connection>
+   <Source>Gxdigital_delay_st:Out1</Source>
+   <Target>GxReverb-Stereo:In1</Target>
+  </Connection>
+  <Connection>
+   <Source>GxReverb-Stereo:Out</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>GxReverb-Stereo:Out1</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
+   <Source>ZamGate:Audio Output 1</Source>
+   <Target>Neural Amp Modeler:Input</Target>
+  </Connection>
+ </ExternalPatchbay>
+</CARLA-PROJECT>
