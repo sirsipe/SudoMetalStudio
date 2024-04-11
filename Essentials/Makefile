@@ -28,10 +28,10 @@ neural-amp-modeler-ui: update-packages neural-amp-modeler-lv2
 	$(CD) neural-amp-modeler-ui ; $(MAKE) ; sudo $(MAKE) install
 	
 NAM-models:
-	$(GIT) submodule update --init --recursive NAM_models
+	$(GIT) submodule update --init NAM_models
 
 Speaker-Cabinets-IRs:
-	$(GIT) submodule update --init --recursive Speaker-Cabinets-IRs
+	$(GIT) submodule update --init Speaker-Cabinets-IRs
 
 GxPlugins.lv2: update-packages
 	sudo $(APT) install -y libc6-dev libcairo2-dev libx11-dev x11proto-dev lv2-dev pkg-config
