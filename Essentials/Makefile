@@ -41,8 +41,8 @@ GxPlugins.lv2: update-packages
 Carla-Metal-Demo: update-packages neural-amp-modeler-ui NAM-models Speaker-Cabinets-IRs GxPlugins.lv2
 	sudo $(APT) install -y carla
 	$(MKDIR) Carla
-	$(MKDIR) Carla/"LV2 Convolution Mono=>Stereo"
-	$(LN) -s ../../Speaker-Cabinets-IRs/"Original 3 Impulses"/"GuitarHack Original Edge.wav" Carla/"LV2 Convolution Mono=>Stereo"/
+	$(MKDIR) Carla/"x42 - IR Convolver Mono => Stereo"
+	$(LN) -s ../../Speaker-Cabinets-IRs/"Original 3 Impulses"/"GuitarHack Original Edge.wav" Carla/"x42 - IR Convolver Mono => Stereo"/
 	$(MKDIR) Carla/"Neural Amp Modeler"
 	$(LN) -s ../../NAM_models/"Helga B 6505+ Red ch - MXR Drive V2.nam" Carla/"Neural Amp Modeler"/
 	carla SMS-Preset.carxp &

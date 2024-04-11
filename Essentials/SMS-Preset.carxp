@@ -108,7 +108,7 @@
     <Index>1</Index>
     <Name>Output Lvl</Name>
     <Symbol>output_level</Symbol>
-    <Value>-11.2196073532104</Value>
+    <Value>-14.1999998092651</Value>
    </Parameter>
 
    <CustomData>
@@ -125,23 +125,37 @@
   </Data>
  </Plugin>
 
- <!-- LV2 Convolution Mono=&gt;Stereo -->
+ <!-- x42 - IR Convolver Mono =&gt; Stereo -->
  <Plugin>
   <Info>
    <Type>LV2</Type>
-   <Name>LV2 Convolution Mono=&gt;Stereo</Name>
-   <URI>http://gareus.org/oss/lv2/convoLV2#MonoToStereo</URI>
+   <Name>x42 - IR Convolver Mono =&gt; Stereo</Name>
+   <URI>http://gareus.org/oss/lv2/zeroconvolv#CfgMonoToStereo</URI>
   </Info>
 
   <Data>
    <Active>Yes</Active>
    <ControlChannel>1</ControlChannel>
-   <Options>0x0</Options>
+   <Options>0x1</Options>
 
    <Parameter>
     <Index>0</Index>
-    <Name>Gain</Name>
-    <Symbol>gain</Symbol>
+    <Name>Buffered/Latent Convolution</Name>
+    <Symbol>buffered</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Dry Signal Level</Name>
+    <Symbol>dry</Symbol>
+    <Value>-60</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Wet Signal Level</Name>
+    <Symbol>wet</Symbol>
     <Value>0</Value>
    </Parameter>
 
@@ -152,38 +166,45 @@
    </CustomData>
 
    <CustomData>
-    <Type>http://lv2plug.in/ns/ext/atom#String</Type>
-    <Key>http://gareus.org/oss/lv2/convoLV2#state</Key>
-    <Value>
-convolution.ir.gain.0=5.000000e-01
-convolution.ir.delay.0=0
-convolution.ir.channel.0=1
-convolution.source.0=1
-convolution.output.0=1
-convolution.ir.gain.1=5.000000e-01
-convolution.ir.delay.1=0
-convolution.ir.channel.1=2
-convolution.source.1=1
-convolution.output.1=2
-convolution.ir.gain.2=5.000000e-01
-convolution.ir.delay.2=0
-convolution.ir.channel.2=0
-convolution.source.2=0
-convolution.output.2=0
-convolution.ir.gain.3=5.000000e-01
-convolution.ir.delay.3=0
-convolution.ir.channel.3=0
-convolution.source.3=0
-convolution.output.3=0
-convolution.maxsize=1048576
-
-    </Value>
+    <Type>http://lv2plug.in/ns/ext/atom#Path</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#ir</Key>
+    <Value>GuitarHack Original Edge.wav</Value>
    </CustomData>
 
    <CustomData>
-    <Type>http://lv2plug.in/ns/ext/atom#Path</Type>
-    <Key>http://gareus.org/oss/lv2/convoLV2#impulse</Key>
-    <Value>GuitarHack Original Edge.wav</Value>
+    <Type>http://lv2plug.in/ns/ext/atom#Float</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#gain</Key>
+    <Value>AACAPw==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Int</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#predelay</Key>
+    <Value>AAAAAA==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Int</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#artificial_latency</Key>
+    <Value>AAAAAA==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Bool</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#sum_inputs</Key>
+    <Value>AAAAAA==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Vector</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#channel_gain</Key>
+    <Value>BAAAAAYAAAAAAIA/AACAPwAAgD8AAIA/</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Vector</Type>
+    <Key>http://gareus.org/oss/lv2/zeroconvolv#channel_predelay</Key>
+    <Value>BAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAA</Value>
    </CustomData>
   </Data>
  </Plugin>
@@ -397,16 +418,44 @@ convolution.maxsize=1048576
    <Target>ZamGate:Audio Input 1</Target>
   </Connection>
   <Connection>
+   <Source>ZamGate:Audio Output 1</Source>
+   <Target>Neural Amp Modeler:Input</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-left</Source>
+   <Target>pulse_in:front-left</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-left</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-left</Source>
+   <Target>system:playback_7</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-left</Source>
+   <Target>system:playback_9</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-right</Source>
+   <Target>pulse_in:front-right</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-right</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-right</Source>
+   <Target>system:playback_8</Target>
+  </Connection>
+  <Connection>
+   <Source>discord_out:front-right</Source>
+   <Target>system:playback_10</Target>
+  </Connection>
+  <Connection>
    <Source>Neural Amp Modeler:Output</Source>
-   <Target>LV2 Convolution Mono=&gt;Stereo:In</Target>
-  </Connection>
-  <Connection>
-   <Source>LV2 Convolution Mono=&gt;Stereo:OutL</Source>
-   <Target>GxChorus-Stereo:In</Target>
-  </Connection>
-  <Connection>
-   <Source>LV2 Convolution Mono=&gt;Stereo:OutR</Source>
-   <Target>GxChorus-Stereo:In1</Target>
+   <Target>x42 - IR Convolver Mono =&gt; Stereo:In</Target>
   </Connection>
   <Connection>
    <Source>GxChorus-Stereo:Out</Source>
@@ -429,12 +478,24 @@ convolution.maxsize=1048576
    <Target>system:playback_1</Target>
   </Connection>
   <Connection>
+   <Source>GxReverb-Stereo:Out</Source>
+   <Target>system:playback_7</Target>
+  </Connection>
+  <Connection>
    <Source>GxReverb-Stereo:Out1</Source>
    <Target>system:playback_2</Target>
   </Connection>
   <Connection>
-   <Source>ZamGate:Audio Output 1</Source>
-   <Target>Neural Amp Modeler:Input</Target>
+   <Source>GxReverb-Stereo:Out1</Source>
+   <Target>system:playback_8</Target>
+  </Connection>
+  <Connection>
+   <Source>x42 - IR Convolver Mono =&gt; Stereo:OutL</Source>
+   <Target>GxChorus-Stereo:In</Target>
+  </Connection>
+  <Connection>
+   <Source>x42 - IR Convolver Mono =&gt; Stereo:OutR</Source>
+   <Target>GxChorus-Stereo:In1</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>
