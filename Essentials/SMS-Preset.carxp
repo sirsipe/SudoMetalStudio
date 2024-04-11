@@ -422,38 +422,6 @@
    <Target>Neural Amp Modeler:Input</Target>
   </Connection>
   <Connection>
-   <Source>discord_out:front-left</Source>
-   <Target>pulse_in:front-left</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-left</Source>
-   <Target>system:playback_1</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-left</Source>
-   <Target>system:playback_7</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-left</Source>
-   <Target>system:playback_9</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-right</Source>
-   <Target>pulse_in:front-right</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-right</Source>
-   <Target>system:playback_2</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-right</Source>
-   <Target>system:playback_8</Target>
-  </Connection>
-  <Connection>
-   <Source>discord_out:front-right</Source>
-   <Target>system:playback_10</Target>
-  </Connection>
-  <Connection>
    <Source>Neural Amp Modeler:Output</Source>
    <Target>x42 - IR Convolver Mono =&gt; Stereo:In</Target>
   </Connection>
@@ -478,16 +446,8 @@
    <Target>system:playback_1</Target>
   </Connection>
   <Connection>
-   <Source>GxReverb-Stereo:Out</Source>
-   <Target>system:playback_7</Target>
-  </Connection>
-  <Connection>
    <Source>GxReverb-Stereo:Out1</Source>
    <Target>system:playback_2</Target>
-  </Connection>
-  <Connection>
-   <Source>GxReverb-Stereo:Out1</Source>
-   <Target>system:playback_8</Target>
   </Connection>
   <Connection>
    <Source>x42 - IR Convolver Mono =&gt; Stereo:OutL</Source>

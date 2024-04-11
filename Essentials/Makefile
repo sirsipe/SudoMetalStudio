@@ -38,7 +38,11 @@ GxPlugins.lv2: update-packages
 	$(GIT) submodule update --init --recursive GxPlugins.lv2
 	$(CD) GxPlugins.lv2 ; $(MAKE) ; sudo $(MAKE) install
 
-Carla-Metal-Demo: update-packages neural-amp-modeler-ui NAM-models Speaker-Cabinets-IRs GxPlugins.lv2
+Setup-Pipewire:
+	pw-metadata -n settings 0 clock.force-quantum 128
+	pw-metadata -n settings 0 clock.force-rate 48000
+
+Carla-Metal-Demo: update-packages neural-amp-modeler-ui NAM-models Speaker-Cabinets-IRs GxPlugins.lv2 Setup-Pipewire
 	sudo $(APT) install -y carla
 	$(MKDIR) Carla
 	$(MKDIR) Carla/"x42 - IR Convolver Mono => Stereo"
@@ -47,10 +51,11 @@ Carla-Metal-Demo: update-packages neural-amp-modeler-ui NAM-models Speaker-Cabin
 	$(LN) -s ../../NAM_models/"Helga B 6505+ Red ch - MXR Drive V2.nam" Carla/"Neural Amp Modeler"/
 	carla SMS-Preset.carxp &
 
+
 clean:
 	$(RM) -rf neural-amp-modeler-lv2
 	$(RM) -rf neural-amp-modeler-ui
 	$(RM) -rf GxPlugins.lv2
 	$(RM) -rf Carla
 
-.PHONY: clean update-packages Carla-Metal-Demo
+.PHONY: update-packages neural-amp-modeler-lv2 neural-amp-modeler-ui NAM-models Speaker-Cabinets-IRs GxPlugins.lv2 Setup-Pipewire Carla-Metal-Demo clean
