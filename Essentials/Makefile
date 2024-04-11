@@ -1,6 +1,7 @@
 
 MAKE=make
 APT=apt-get
+SNAP=snap
 CD=cd
 CMAKE=cmake
 GIT=git
@@ -15,7 +16,8 @@ update-packages:
 	sudo $(APT) update
 
 neural-amp-modeler-lv2: update-packages
-	sudo $(APT) install -y $(cmake) $(GIT)
+	sudo $(APT) install -y $(GIT)
+	sudo $(SNAP) install $(CMAKE) --classic
 	$(GIT) submodule update --init --recursive neural-amp-modeler-lv2
 	$(CD) neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON ; $(MAKE)
 	sudo $(CP) -r neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/
