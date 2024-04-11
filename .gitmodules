@@ -1,0 +1,15 @@
+[submodule "Essentials/neural-amp-modeler-lv2"]
+	path = Essentials/neural-amp-modeler-lv2
+	url = https://github.com/mikeoliphant/neural-amp-modeler-lv2
+[submodule "Essentials/neural-amp-modeler-ui"]
+	path = Essentials/neural-amp-modeler-ui
+	url = https://github.com/brummer10/neural-amp-modeler-ui
+[submodule "Essentials/NAM_models"]
+	path = Essentials/NAM_models
+	url = https://github.com/pelennor2170/NAM_models
+[submodule "Essentials/Speaker-Cabinets-IRs"]
+	path = Essentials/Speaker-Cabinets-IRs
+	url = https://github.com/rodamaralgeo/Speaker-Cabinets-IRs
+[submodule "Essentials/GxPlugins.lv2"]
+	path = Essentials/GxPlugins.lv2
+	url = https://github.com/brummer10/GxPlugins.lv2
