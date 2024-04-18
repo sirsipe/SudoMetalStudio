@@ -31,9 +31,9 @@ $(BUILD)/neural-amp-modeler-lv2.deps: $(BUILD)/updated
 
 # build & install neural-amp-modeler-lv2
 $(BUILD)/neural-amp-modeler-lv2.created: $(BUILD)/neural-amp-modeler-lv2.deps
-	$(GIT) submodule update --init --recursive (BUILD)/neural-amp-modeler-lv2
-	$(CD) (BUILD)/neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON ; $(MAKE)
-	sudo $(CP) -r (BUILD)/neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/
+	$(GIT) submodule update --init --recursive $(BUILD)/neural-amp-modeler-lv2
+	$(CD) $(BUILD)/neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON ; $(MAKE)
+	sudo $(CP) -r $(BUILD)/neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/
 	echo '' > $(BUILD)/neural-amp-modeler-lv2.created
 
 # install dependencies of neural-amp-modeler-ui
@@ -89,18 +89,12 @@ $(BUILD)/SMS-Demo-Preset-1.deps: $(BUILD)/NAM-models.fetched $(BUILD)/Speaker-Ca
 	$(CP) SMS-Demo-Preset-1.carxp SMS-Demo-Preset-1/
 	echo '' > $(BUILD)/SMS-Demo-Preset-1.deps
 	
-SMS-Demo-Preset-1: $(BUILD)/SMS-Demo-Preset-1.deps $(BUILD)/neural-amp-modeler-ui.created $(BUILD)/GxPlugins.lv2.created $(BUILD)/Carla.installed $(BUILD)/setup-pipewire
+SMS-Demo-Preset-1: $(BUILD)/updated $(BUILD)/SMS-Demo-Preset-1.deps $(BUILD)/neural-amp-modeler-ui.created $(BUILD)/GxPlugins.lv2.created $(BUILD)/Carla.installed $(BUILD)/setup-pipewire
 	carla SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp &
 
 
 clean:
-	$(RM) -rf $(BUILD)
-	$(CD) neural-amp-modeler-lv2 ; $(MAKE) clean
-	$(CD) neural-amp-modeler-ui ; $(MAKE) clean
-	$(CD) GxPlugins.lv2 ; $(MAKE) clean
-	$(RM) -rf Speaker-Cabinets-IRs/*
-	$(RM) -rf NAM_models/*
-	$(RM) -rf SMS-Demo-Preset-1
+	echo "Sweep...sweeeeep... yea sorry just clean it yourself"
 
 	
 .PHONY: clean SMS-Demo-Preset-1
