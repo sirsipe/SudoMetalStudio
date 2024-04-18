@@ -11,5 +11,5 @@
 	path = Essentials/Speaker-Cabinets-IRs
 	url = https://github.com/rodamaralgeo/Speaker-Cabinets-IRs
 [submodule "Essentials/GxPlugins.lv2"]
-	path = Essentials/.build/GxPlugin.lv2
+	path = Essentials/.build/GxPlugins.lv2
 	url = https://github.com/brummer10/GxPlugins.lv2
