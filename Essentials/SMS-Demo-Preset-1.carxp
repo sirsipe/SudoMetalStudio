@@ -426,6 +426,14 @@
    <Target>x42 - IR Convolver Mono =&gt; Stereo:In</Target>
   </Connection>
   <Connection>
+   <Source>x42 - IR Convolver Mono =&gt; Stereo:OutL</Source>
+   <Target>GxChorus-Stereo:In</Target>
+  </Connection>
+  <Connection>
+   <Source>x42 - IR Convolver Mono =&gt; Stereo:OutR</Source>
+   <Target>GxChorus-Stereo:In1</Target>
+  </Connection>
+  <Connection>
    <Source>GxChorus-Stereo:Out</Source>
    <Target>Gxdigital_delay_st:In</Target>
   </Connection>
@@ -448,14 +456,6 @@
   <Connection>
    <Source>GxReverb-Stereo:Out1</Source>
    <Target>system:playback_2</Target>
-  </Connection>
-  <Connection>
-   <Source>x42 - IR Convolver Mono =&gt; Stereo:OutL</Source>
-   <Target>GxChorus-Stereo:In</Target>
-  </Connection>
-  <Connection>
-   <Source>x42 - IR Convolver Mono =&gt; Stereo:OutR</Source>
-   <Target>GxChorus-Stereo:In1</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>
