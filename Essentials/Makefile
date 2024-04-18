@@ -10,8 +10,10 @@ RM=rm
 MKDIR=mkdir
 LN=ln
 BUILD=.build
+FIND=find
+SED=sed
 
-all: SMS-Demo-Preset-1
+all: SMS-Essentials
 
 # Build folder
 $(BUILD):
@@ -102,16 +104,48 @@ SMS-Essentials: $(BUILD)/calf-plugins.installed $(BUILD)/neural-amp-modeler-ui.c
 	@echo "ROCK ON \,,/__(><)__\,,/"
 	@echo
 
+
+$(BUILD)/audio-dev:
+	@devices=$$(pactl list sources | grep Description: | grep -v "Monitor of " | awk -F ': ' '{print $$2}'); \
+	if [ $$(echo "$$devices" | wc -l) -eq 1 ]; then \
+		selected_device=$$(echo "$$devices"); \
+		if [ -z "$$selected_device" ]; then \
+			echo ; \
+			echo "ERROR: No couldn't find any audio devices :("; \
+			echo ; \
+			exit 1; \
+        fi; \
+	else \
+		echo ; \
+    	echo "Which one looks like your primary Audio Device?"; \
+		echo ; \
+    	echo "$$devices" | cat -n; \
+    	echo ; \
+		echo -n "Number: "; \
+    	read choice; \
+    	echo ;\
+    	selected_device=$$(echo "$$devices" | $(SED) -n "$$choice p"); \
+	fi; \
+    echo "Selected Audio Device for Demo presets: $$selected_device"; \
+    echo -n "$$selected_device" > $(BUILD)/audio-dev
+
+
+
 # Create Demo-Preset-1
-$(BUILD)/SMS-Demo-Preset-1.deps: SMS-Essentials
+$(BUILD)/SMS-Demo-Preset-1.deps: $(BUILD)/audio-dev SMS-Essentials
 	$(RM) -rf SMS-Demo-Preset-1
 	$(MKDIR) -p SMS-Demo-Preset-1
 	$(MKDIR) -p SMS-Demo-Preset-1/Carla
 	$(MKDIR) -p SMS-Demo-Preset-1/Carla/"x42 - IR Convolver Mono => Stereo"
 	$(LN) -s ../../../Speaker-Cabinets-IRs/"Original 3 Impulses"/"GuitarHack Original Edge.wav" SMS-Demo-Preset-1/Carla/"x42 - IR Convolver Mono => Stereo"/
 	$(MKDIR) -p SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"	
-	find NAM_models -name \*.nam -exec ln -vs ../../../"{}" SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"/ ';'
+	$(FIND) NAM_models -name \*.nam -exec $(LN) -vs ../../../"{}" SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"/ ';'
 	$(CP) SMS-Demo-Preset-1.carxp SMS-Demo-Preset-1/
+	@selectedDevice=$$(cat $(BUILD)/audio-dev); \
+	$(SED) -i "s/system:capture_1/$$selectedDevice:capture_AUX0/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/system:capture_2/$$selectedDevice:capture_AUX1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/system:playback_1/$$selectedDevice:playback_AUX0/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/system:playback_2/$$selectedDevice:playback_AUX1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
 	touch $(BUILD)/SMS-Demo-Preset-1.deps
 	
 SMS-Essentials-Demo:  $(BUILD)/SMS-Demo-Preset-1.deps
