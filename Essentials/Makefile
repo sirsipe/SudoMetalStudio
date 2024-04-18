@@ -30,11 +30,11 @@ $(BUILD)/neural-amp-modeler-lv2.deps: $(BUILD)/updated
 	echo '' > $(BUILD)/neural-amp-modeler-lv2.deps
 
 # build & install neural-amp-modeler-lv2
-$(BUILD)/neural-amp-modeler-lv2: $(BUILD)/neural-amp-modeler-lv2.deps
-	$(GIT) submodule update --init --recursive neural-amp-modeler-lv2
-	$(CD) neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON ; $(MAKE)
-	sudo $(CP) -r neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/
-	echo '' > $(BUILD)/neural-amp-modeler-lv2
+$(BUILD)/neural-amp-modeler-lv2.created: $(BUILD)/neural-amp-modeler-lv2.deps
+	$(GIT) submodule update --init --recursive (BUILD)/neural-amp-modeler-lv2
+	$(CD) (BUILD)/neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON ; $(MAKE)
+	sudo $(CP) -r (BUILD)/neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/
+	echo '' > $(BUILD)/neural-amp-modeler-lv2.created
 
 # install dependencies of neural-amp-modeler-ui
 $(BUILD)/neural-amp-modeler-ui.deps: $(BUILD)/updated
@@ -42,10 +42,10 @@ $(BUILD)/neural-amp-modeler-ui.deps: $(BUILD)/updated
 	echo '' > $(BUILD)/neural-amp-modeler-ui.deps
 
 # build & install neural-amp-modeler-ui
-$(BUILD)/neural-amp-modeler-ui: $(BUILD)/neural-amp-modeler-ui.deps $(BUILD)/neural-amp-modeler-lv2
-	$(GIT) submodule update --init --recursive neural-amp-modeler-ui
-	$(CD) neural-amp-modeler-ui ; $(MAKE) ; sudo $(MAKE) install
-	echo '' > $(BUILD)/neural-amp-modeler-ui
+$(BUILD)/neural-amp-modeler-ui.created: $(BUILD)/neural-amp-modeler-ui.deps $(BUILD)/neural-amp-modeler-lv2.created
+	$(GIT) submodule update --init --recursive $(BUILD)/neural-amp-modeler-ui
+	$(CD) $(BUILD)/neural-amp-modeler-ui ; $(MAKE) ; sudo $(MAKE) install
+	echo '' > $(BUILD)/neural-amp-modeler-ui.created
 
 # recipe to ensure NAM-models submodule has been fetched
 $(BUILD)/NAM-models.fetched: $(BUILD)
@@ -63,10 +63,10 @@ $(BUILD)/GxPlugins.lv2.deps: $(BUILD)/updated
 	echo '' > $(BUILD)/GxPlugins.lv2.deps
 
 # build & install GxPlugins.lv2
-$(BUILD)/GxPlugins.lv2: $(BUILD)/GxPlugins.lv2.deps
-	$(GIT) submodule update --init --recursive GxPlugins.lv2
-	$(CD) GxPlugins.lv2 ; $(MAKE) ; sudo $(MAKE) install
-	echo '' > $(BUILD)/GxPlugins.lv2
+$(BUILD)/GxPlugins.lv2.created: $(BUILD)/GxPlugins.lv2.deps
+	$(GIT) submodule update --init --recursive $(BUILD)/GxPlugins.lv2
+	$(CD) $(BUILD)/GxPlugins.lv2 ; $(MAKE) ; sudo $(MAKE) install
+	echo '' > $(BUILD)/GxPlugins.lv2.created
 
 # setup pipewire to 128 buffersize. This is needed to achieve reasonable latency.
 $(BUILD)/setup-pipewire: $(BUILD)
@@ -74,12 +74,12 @@ $(BUILD)/setup-pipewire: $(BUILD)
 	echo '' > $(BUILD)/setup-pipewire
 
 # install Carla with apt
-$(BUILD)/Carla.deps: $(BUILD)/updated
+$(BUILD)/Carla.installed: $(BUILD)/updated
 	sudo $(APT) install -y carla
-	echo '' > $(BUILD)/Carla.deps
+	echo '' > $(BUILD)/Carla.installed
 
 # Create Demo-Preset-1
-$(BUILD)/SMS-Demo-Preset-1.deps: $(BUILD)/neural-amp-modeler-ui $(BUILD)/NAM-models.fetched $(BUILD)/Speaker-Cabinets-IRs.fetched $(BUILD)/GxPlugins.lv2 $(BUILD)/Carla.deps
+$(BUILD)/SMS-Demo-Preset-1.deps: $(BUILD)/NAM-models.fetched $(BUILD)/Speaker-Cabinets-IRs.fetched 
 	$(MKDIR) -p SMS-Demo-Preset-1
 	$(MKDIR) -p SMS-Demo-Preset-1/Carla
 	$(MKDIR) -p SMS-Demo-Preset-1/Carla/"x42 - IR Convolver Mono => Stereo"
@@ -89,7 +89,7 @@ $(BUILD)/SMS-Demo-Preset-1.deps: $(BUILD)/neural-amp-modeler-ui $(BUILD)/NAM-mod
 	$(CP) SMS-Demo-Preset-1.carxp SMS-Demo-Preset-1/
 	echo '' > $(BUILD)/SMS-Demo-Preset-1.deps
 	
-SMS-Demo-Preset-1: $(BUILD)/SMS-Demo-Preset-1.deps $(BUILD)/setup-pipewire
+SMS-Demo-Preset-1: $(BUILD)/SMS-Demo-Preset-1.deps $(BUILD)/neural-amp-modeler-ui.created $(BUILD)/GxPlugins.lv2.created $(BUILD)/Carla.installed $(BUILD)/setup-pipewire
 	carla SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp &
 
 
