@@ -1,3 +1,5 @@
 .vscode
 LV2Plugins/*.lv2
 LV2Plugins/src/*/res/*.h
+Essentials/.makestatus
+Essentials/SMS-Demo-Preset-1
