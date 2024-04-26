@@ -47,95 +47,135 @@ $(STATUS)/audio-dev: $(STATUS)
     	selected_device=$$(echo "$$devices" | $(SED) -n "$$choice p"); \
 	fi; \
     echo "Selected Audio Device for Demo presets: $$selected_device"; \
-    echo -n "$$selected_device" > $(STATUS)/audio-dev
+    echo -n "$$selected_device" > $(STATUS)/audio-dev ; \
+	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "capture" ) | ."audio.position"' | cut -d ',' -f1 | tr -d '"\n' | awk '{print "capture_" $0}' > $(STATUS)/audio-dev-in1 ; \
+	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "capture" ) | ."audio.position"' | cut -d ',' -f2 | tr -d '"\n' | awk '{print "capture_" $0}' > $(STATUS)/audio-dev-in2 ; \
+	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "playback" ) | ."audio.position"' | cut -d ',' -f1 | tr -d '"\n' | awk '{print "playback_" $0}' > $(STATUS)/audio-dev-out1 ; \
+	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "playback" ) | ."audio.position"' | cut -d ',' -f2 | tr -d '"\n' | awk '{print "playback_" $0}' > $(STATUS)/audio-dev-out2
 
 # recipe to ensure NAM-models submodule has been fetched
-$(STATUS)/nam-models.fetched: $(STATUS)
+$(STATUS)/nam-models-fetched: $(STATUS)
+	@echo
 	@echo "Fetching 'NAM_models'..."
-	@$(GIT) submodule update --init NAM_models > /dev/null
-	@touch $(STATUS)/nam-models.fetched
+	@echo
+	@$(GIT) submodule update --init NAM_models
+	@touch $(STATUS)/nam-models-fetched
 
 # recipe to ensure Speaker-Cabinets-IRs submodule has been fetched
-$(STATUS)/speaker-cabinets-irs.fetched: $(STATUS)
+$(STATUS)/irs-fetched:
+	@echo
 	@echo "Fetching 'Speaker-Cabinets-IRs'..."
-	@$(GIT) submodule update --init Speaker-Cabinets-IRs > /dev/null
-	@touch $(STATUS)/speaker-cabinets-irs.fetched
+	@echo
+	@$(GIT) submodule update --init Speaker-Cabinets-IRs
+	@touch $(STATUS)/irs-fetched
 
 # Configure pipewire to 128 buffersize. This is needed to achieve reasonable latency.
-$(STATUS)/pipewire.configured: $(STATUS)
+$(STATUS)/pipewire-configured: $(STATUS)
+	@echo
 	@echo "Configuring PipeWire..."
-	@pw-metadata -n settings 0 clock.force-quantum 128 > /dev/null
-	@touch $(STATUS)/pipewire.configured
+	@echo
+	@pw-metadata -n settings 0 clock.force-quantum 128
+	@touch $(STATUS)/pipewire-configured
 
-# updated is used to ensure 'sudo apt update' has been 
+# apt-updated is used to ensure 'sudo apt update' has been 
 # executed before installing any packages with apt 
-$(STATUS)/updated: $(STATUS)
+$(STATUS)/apt-updated: $(STATUS)
+	@echo
 	@echo "Updating package lists..."
-	@sudo $(APT) update > /dev/null
-	@touch $(STATUS)/updated
+	@echo
+	@sudo $(APT) update
+	@touch $(STATUS)/apt-updated
 
 # install calf-plugins with apt
-$(STATUS)/calf-plugins.installed: $(STATUS)/updated
+$(STATUS)/calf-installed: $(STATUS)/apt-updated
+	@echo
 	@echo "Installing 'Calf Studio Gear'..."
-	@sudo $(APT) install -y calf-plugins > /dev/null
-	@touch $(STATUS)/calf-plugins.installed
+	@echo
+	@sudo $(APT) install -y calf-plugins
+	@touch $(STATUS)/calf-installed
 
 # install Carla with apt
-$(STATUS)/carla.installed: $(STATUS)/updated
+$(STATUS)/carla-installed: $(STATUS)/apt-updated
+	@echo
 	@echo "Installing 'Carla'..."
-	@sudo $(APT) install -y carla > /dev/null
-	@touch $(STATUS)/carla.installed
+	@echo
+	@sudo $(APT) install -y carla
+	@touch $(STATUS)/carla-installed
 	
 # install dependencies of neural-amp-modeler-lv2
-$(STATUS)/neural-amp-modeler-lv2.deps: $(STATUS)/updated
+$(STATUS)/nam-deps: $(STATUS)/apt-updated
+	@echo
 	@echo "Installing 'neural-amp-modeler-lv2' dependencies..."
-	@sudo $(APT) install -y $(GIT) > /dev/null
-	@sudo $(SNAP) install $(CMAKE) --classic > /dev/null
-	@touch $(STATUS)/neural-amp-modeler-lv2.deps
+	@echo
+	@sudo $(APT) install -y $(GIT)
+	@sudo $(SNAP) install $(CMAKE) --classic
+	@touch $(STATUS)/nam-deps
 
 # install dependencies of neural-amp-modeler-ui
-$(STATUS)/neural-amp-modeler-ui.deps: $(STATUS)/updated
+$(STATUS)/nam-ui-deps: $(STATUS)/apt-updated
+	@echo
 	@echo "Installing 'neural-amp-modeler-ui' dependencies..."
-	@sudo $(APT) install -y $(GIT) libcairo2-dev libx11-dev lv2-dev pkg-config > /dev/null
-	@touch $(STATUS)/neural-amp-modeler-ui.deps
+	@echo
+	@sudo $(APT) install -y $(GIT) libcairo2-dev libx11-dev lv2-dev pkg-config
+	@touch $(STATUS)/nam-ui-deps
 
 # install dependencies of GxPlugins.lv2
-$(STATUS)/gxplugins.lv2.deps: $(STATUS)/updated
+$(STATUS)/gxplugins-deps: $(STATUS)/apt-updated
+	@echo
 	@echo "Installing 'GxPlugins.lv2' dependencies..."
-	@sudo $(APT) install -y libc6-dev libcairo2-dev libx11-dev x11proto-dev lv2-dev pkg-config > /dev/null
-	@touch $(STATUS)/gxplugins.lv2.deps
+	@echo
+	@sudo $(APT) install -y libc6-dev libcairo2-dev libx11-dev x11proto-dev lv2-dev pkg-config
+	@touch $(STATUS)/gxplugins-deps
 
 
 # build & install neural-amp-modeler-lv2
-$(STATUS)/neural-amp-modeler-lv2.installed: $(STATUS)/neural-amp-modeler-lv2.deps
+$(STATUS)/nam-installed: $(STATUS)/nam-deps
+	@echo
 	@echo "Fetching 'neural-amp-modeler-lv2'..."
-	@$(GIT) submodule update --init --recursive $(BUILD)/neural-amp-modeler-lv2 > /dev/null
+	@echo
+	@$(GIT) submodule update --init --recursive $(BUILD)/neural-amp-modeler-lv2
+	@echo
 	@echo "Building 'neural-amp-modeler-lv2'..."
-	@$(CD) $(BUILD)/neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON > /dev/null ; $(MAKE) > /dev/null
+	@echo
+	@$(CD) $(BUILD)/neural-amp-modeler-lv2/build ; $(CMAKE) .. -DCMAKE_BUILD_TYPE="Release" -DUSE_NATIVE_ARCH=ON ; $(MAKE)
+	@echo
 	@echo "Installing 'neural-amp-modeler-lv2'..."
-	@sudo $(CP) -r $(BUILD)/neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/ > /dev/null
-	@touch $(STATUS)/neural-amp-modeler-lv2.installed
+	@echo
+	@sudo $(CP) -r $(BUILD)/neural-amp-modeler-lv2/build/neural_amp_modeler.lv2 /usr/lib/lv2/
+	@touch $(STATUS)/nam-installed
 
 # build & install neural-amp-modeler-ui
-$(STATUS)/neural-amp-modeler-ui.installed: $(STATUS)/neural-amp-modeler-ui.deps $(STATUS)/neural-amp-modeler-lv2.installed
+$(STATUS)/nam-ui-installed: $(STATUS)/nam-ui-deps $(STATUS)/nam-installed
+	@echo
 	@echo "Fetching 'neural-amp-modeler-ui'..."
-	@$(GIT) submodule update --init --recursive $(BUILD)/neural-amp-modeler-ui > /dev/null
+	@echo
+	@$(GIT) submodule update --init --recursive $(BUILD)/neural-amp-modeler-ui
+	@echo
 	@echo "Building 'neural-amp-modeler-ui'..."
-	@$(CD) $(BUILD)/neural-amp-modeler-ui ; $(MAKE) > /dev/null
+	@echo
+	@$(CD) $(BUILD)/neural-amp-modeler-ui ; $(MAKE)
+	@echo
 	@echo "Installing 'neural-amp-modeler-ui'..."
-	@$(CD) $(BUILD)/neural-amp-modeler-ui ; sudo $(MAKE) install > /dev/null
-	@touch $(STATUS)/neural-amp-modeler-ui.installed
+	@echo
+	@$(CD) $(BUILD)/neural-amp-modeler-ui ; sudo $(MAKE) install
+	@touch $(STATUS)/nam-ui-installed
 
 
 # build & install GxPlugins.lv2
-$(STATUS)/gxplugins.lv2.installed: $(STATUS)/gxplugins.lv2.deps
+$(STATUS)/gxplugins-installed: $(STATUS)/gxplugins-deps
+	@echo
 	@echo "Fetching 'GxPlugins.lv2'..."
-	@$(GIT) submodule update --init --recursive $(BUILD)/GxPlugins.lv2 > /dev/null
+	@echo
+	@$(GIT) submodule update --init --recursive $(BUILD)/GxPlugins.lv2
+	@echo
 	@echo "Building 'GxPlugins.lv2' (this takes a while)..."
-	@$(CD) $(BUILD)/GxPlugins.lv2 ; $(MAKE) > /dev/null
+	@echo
+	@$(CD) $(BUILD)/GxPlugins.lv2 ; $(MAKE)
+	@echo
 	@echo "Installing 'GxPlugins.lv2'..."
-	@$(CD) $(BUILD)/GxPlugins.lv2 ; sudo $(MAKE) install > /dev/null
-	@touch $(STATUS)/gxplugins.lv2.installed
+	@echo
+	@$(CD) $(BUILD)/GxPlugins.lv2 ; sudo $(MAKE) install
+	@touch $(STATUS)/gxplugins-installed
 
 
 # SMS-Essentials:
@@ -147,14 +187,14 @@ $(STATUS)/gxplugins.lv2.installed: $(STATUS)/gxplugins.lv2.deps
 #  - Calf Studio Gear installed
 #  - PipeWire configured for 128 buffer size
 SMS-Essentials: \
-			$(STATUS)/neural-amp-modeler-lv2.installed \
-			$(STATUS)/neural-amp-modeler-ui.installed \
-			$(STATUS)/carla.installed \
-			$(STATUS)/nam-models.fetched \
-			$(STATUS)/speaker-cabinets-irs.fetched \
-			$(STATUS)/gxplugins.lv2.installed \
-			$(STATUS)/calf-plugins.installed \
-			$(STATUS)/pipewire.configured
+			$(STATUS)/nam-installed \
+			$(STATUS)/nam-ui-installed \
+			$(STATUS)/carla-installed \
+			$(STATUS)/nam-models-fetched \
+			$(STATUS)/irs-fetched \
+			$(STATUS)/gxplugins-installed \
+			$(STATUS)/calf-installed \
+			$(STATUS)/pipewire-configured
 	@echo
 	@echo "SMS-Essentials Package Installed:"
 	@echo "- Neural Amp Modeler with UI installed"
@@ -176,14 +216,14 @@ SMS-Essentials: \
 
 
 # Create Demo-Preset-1
-$(STATUS)/demo-preset-1.deps: $(STATUS)/audio-dev \
-			$(STATUS)/neural-amp-modeler-lv2.installed \
-			$(STATUS)/neural-amp-modeler-ui.installed \
-			$(STATUS)/carla.installed \
-			$(STATUS)/nam-models.fetched \
-			$(STATUS)/speaker-cabinets-irs.fetched \
-			$(STATUS)/gxplugins.lv2.installed \
-			$(STATUS)/pipewire.configured
+$(STATUS)/preset-1-deps: $(STATUS)/audio-dev \
+			$(STATUS)/nam-installed \
+			$(STATUS)/nam-ui-installed \
+			$(STATUS)/carla-installed \
+			$(STATUS)/nam-models-fetched \
+			$(STATUS)/irs-fetched \
+			$(STATUS)/gxplugins-installed \
+			$(STATUS)/pipewire-configured
 	@echo
 	@echo "Creating Carla Preset with"
 	@echo "YOUR GUITAR ->"
@@ -199,19 +239,23 @@ $(STATUS)/demo-preset-1.deps: $(STATUS)/audio-dev \
 	@$(MKDIR) -p SMS-Demo-Preset-1
 	@$(MKDIR) -p SMS-Demo-Preset-1/Carla
 	@$(MKDIR) -p SMS-Demo-Preset-1/Carla/"x42 - IR Convolver Mono => Stereo"
-	@$(LN) -s ../../../Speaker-Cabinets-IRs/"Original 3 Impulses"/"GuitarHack Original Edge.wav" SMS-Demo-Preset-1/Carla/"x42 - IR Convolver Mono => Stereo"/ > /dev/null
+	@$(LN) -s ../../../Speaker-Cabinets-IRs/"Original 3 Impulses"/"GuitarHack Original Edge.wav" SMS-Demo-Preset-1/Carla/"x42 - IR Convolver Mono => Stereo"/
 	@$(MKDIR) -p SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"	
-	@$(FIND) NAM_models -name \*.nam -exec $(LN) -vs ../../../"{}" SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"/ ';' > /dev/null
+	@$(FIND) NAM_models -name \*.nam -exec $(LN) -vs ../../../"{}" SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"/ ';'
 	@$(CP) SMS-Demo-Preset-1.carxp SMS-Demo-Preset-1/
 	@selectedDevice=$$(cat $(STATUS)/audio-dev); \
-	$(SED) -i "s/system:capture_1/$$selectedDevice:capture_AUX0/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
-	$(SED) -i "s/system:capture_2/$$selectedDevice:capture_AUX1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
-	$(SED) -i "s/system:playback_1/$$selectedDevice:playback_AUX0/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
-	$(SED) -i "s/system:playback_2/$$selectedDevice:playback_AUX1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp;
-	@touch $(STATUS)/demo-preset-1.deps
+	@in1=$$(cat $(STATUS)/audio-dev-in1); \
+	@in2=$$(cat $(STATUS)/audio-dev-in2); \
+	@out1=$$(cat $(STATUS)/audio-dev-out1); \
+	@out2=$$(cat $(STATUS)/audio-dev-out2); \
+	$(SED) -i "s/system:capture_1/$$selectedDevice:$$in1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/system:capture_2/$$selectedDevice:$$in2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/system:playback_1/$$selectedDevice:$$out1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/system:playback_2/$$selectedDevice:$$out2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp;
+	@touch $(STATUS)/preset-1-deps
 	
-SMS-Essentials-Demo: $(STATUS)/demo-preset-1.deps
-	@carla SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp > /dev/null &
+SMS-Essentials-Demo: $(STATUS)/preset-1-deps
+	@carla SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp &
 
 
 clean:
