@@ -48,10 +48,10 @@ $(STATUS)/audio-dev: $(STATUS)
 	fi; \
     echo "Selected Audio Device for Demo presets: $$selected_device"; \
     echo -n "$$selected_device" > $(STATUS)/audio-dev ; \
-	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "capture" ) | ."audio.position"' | cut -d ',' -f1 | tr -d '"\n' | awk '{print "capture_" $0}' > $(STATUS)/audio-dev-in1 ; \
-	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "capture" ) | ."audio.position"' | cut -d ',' -f2 | tr -d '"\n' | awk '{print "capture_" $0}' > $(STATUS)/audio-dev-in2 ; \
-	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "playback" ) | ."audio.position"' | cut -d ',' -f1 | tr -d '"\n' | awk '{print "playback_" $0}' > $(STATUS)/audio-dev-out1 ; \
-	pw-dump | jq '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == "$$selected_device" and ."api.alsa.pcm.stream" == "playback" ) | ."audio.position"' | cut -d ',' -f2 | tr -d '"\n' | awk '{print "playback_" $0}' > $(STATUS)/audio-dev-out2
+	pw-dump | jq --arg device "$$selected_device" '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == $$device and ."api.alsa.pcm.stream" == "capture" ) | ."audio.position"' | cut -d ',' -f1 | tr -d '"\n' | awk '{print "capture_" $$0}' > $(STATUS)/audio-dev-in1 ; \
+	pw-dump | jq --arg device "$$selected_device" '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == $$device and ."api.alsa.pcm.stream" == "capture" ) | ."audio.position"' | cut -d ',' -f2 | tr -d '"\n' | awk '{print "capture_" $$0}' > $(STATUS)/audio-dev-in2 ; \
+	pw-dump | jq --arg device "$$selected_device" '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == $$device and ."api.alsa.pcm.stream" == "playback" ) | ."audio.position"' | cut -d ',' -f1 | tr -d '"\n' | awk '{print "playback_" $$0}' > $(STATUS)/audio-dev-out1 ; \
+	pw-dump | jq --arg device "$$selected_device" '.[] | select(.type == "PipeWire:Interface:Node") | .info.props | select(."node.description" == $$device and ."api.alsa.pcm.stream" == "playback" ) | ."audio.position"' | cut -d ',' -f2 | tr -d '"\n' | awk '{print "playback_" $$0}' > $(STATUS)/audio-dev-out2
 
 # recipe to ensure NAM-models submodule has been fetched
 $(STATUS)/nam-models-fetched: $(STATUS)
@@ -244,10 +244,10 @@ $(STATUS)/preset-1-deps: $(STATUS)/audio-dev \
 	@$(FIND) NAM_models -name \*.nam -exec $(LN) -vs ../../../"{}" SMS-Demo-Preset-1/Carla/"Neural Amp Modeler"/ ';'
 	@$(CP) SMS-Demo-Preset-1.carxp SMS-Demo-Preset-1/
 	@selectedDevice=$$(cat $(STATUS)/audio-dev); \
-	@in1=$$(cat $(STATUS)/audio-dev-in1); \
-	@in2=$$(cat $(STATUS)/audio-dev-in2); \
-	@out1=$$(cat $(STATUS)/audio-dev-out1); \
-	@out2=$$(cat $(STATUS)/audio-dev-out2); \
+	in1=$$(cat $(STATUS)/audio-dev-in1); \
+	in2=$$(cat $(STATUS)/audio-dev-in2); \
+	out1=$$(cat $(STATUS)/audio-dev-out1); \
+	out2=$$(cat $(STATUS)/audio-dev-out2); \
 	$(SED) -i "s/system:capture_1/$$selectedDevice:$$in1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
 	$(SED) -i "s/system:capture_2/$$selectedDevice:$$in2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
 	$(SED) -i "s/system:playback_1/$$selectedDevice:$$out1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
