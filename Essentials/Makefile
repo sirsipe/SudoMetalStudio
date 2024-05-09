@@ -70,13 +70,16 @@ $(STATUS)/irs-fetched:
 	@touch $(STATUS)/irs-fetched
 
 # Configure pipewire to 128 buffersize. This is needed to achieve reasonable latency.
+# As a stupid hack to mitigate PW losing jack connection after quantum change,
+# carla (or some jack client) needs to go up once and take the hit.
 $(STATUS)/pipewire-configured: $(STATUS)
 	@echo
 	@echo "Configuring PipeWire..."
 	@echo
-	@pw-metadata -n settings 0 clock.quantum 128
-	@pw-metadata -n settings 0 clock.rate 48000
-	@systemctl --user restart pipewire.service
+	@pw-metadata -n settings 0 clock.force-quantum 128
+	@carla &
+	@sleep 3
+	@killall carla
 	@touch $(STATUS)/pipewire-configured
 
 # apt-updated is used to ensure 'sudo apt update' has been 
