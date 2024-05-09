@@ -209,7 +209,7 @@
   </Data>
  </Plugin>
 
- <!-- GxChorus-Stereo -->
+ <!-- GxChorus-Stereo
  <Plugin>
   <Info>
    <Type>LV2</Type>
@@ -264,8 +264,8 @@
    </CustomData>
   </Data>
  </Plugin>
-
- <!-- Gxdigital_delay_st -->
+ -->
+ <!-- Gxdigital_delay_st 
  <Plugin>
   <Info>
    <Type>LV2</Type>
@@ -355,8 +355,8 @@
    </CustomData>
   </Data>
  </Plugin>
-
- <!-- GxReverb-Stereo -->
+-->
+ <!-- GxReverb-Stereo 
  <Plugin>
   <Info>
    <Type>LV2</Type>
@@ -411,10 +411,10 @@
    </CustomData>
   </Data>
  </Plugin>
-
+-->
  <ExternalPatchbay>
   <Connection>
-   <Source>system:capture_1</Source>
+   <Source>{CAPTURE_INPUT_1}</Source>
    <Target>ZamGate:Audio Input 1</Target>
   </Connection>
   <Connection>
@@ -427,13 +427,15 @@
   </Connection>
   <Connection>
    <Source>x42 - IR Convolver Mono =&gt; Stereo:OutL</Source>
-   <Target>GxChorus-Stereo:In</Target>
+   <!--<Target>GxChorus-Stereo:In</Target>-->
+   <Target>{PLAYBACK_OUTPUT_1}</Target>
   </Connection>
   <Connection>
    <Source>x42 - IR Convolver Mono =&gt; Stereo:OutR</Source>
-   <Target>GxChorus-Stereo:In1</Target>
+   <!--<Target>GxChorus-Stereo:In1</Target>-->
+   <Target>{PLAYBACK_OUTPUT_2}</Target>
   </Connection>
-  <Connection>
+  <!--<Connection>
    <Source>GxChorus-Stereo:Out</Source>
    <Target>Gxdigital_delay_st:In</Target>
   </Connection>
@@ -451,11 +453,11 @@
   </Connection>
   <Connection>
    <Source>GxReverb-Stereo:Out</Source>
-   <Target>system:playback_1</Target>
+   <Target>{PLAYBACK_OUTPUT_1}</Target>
   </Connection>
   <Connection>
    <Source>GxReverb-Stereo:Out1</Source>
-   <Target>system:playback_2</Target>
-  </Connection>
+   <Target>{PLAYBACK_OUTPUT_2}</Target>
+  </Connection>-->
  </ExternalPatchbay>
 </CARLA-PROJECT>

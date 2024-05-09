@@ -14,7 +14,7 @@ STATUS=.makestatus
 FIND=find
 SED=sed
 
-all: SMS-Essentials
+all: SMS-Essentials-Demo
 
 # Status folder
 $(STATUS):
@@ -74,7 +74,9 @@ $(STATUS)/pipewire-configured: $(STATUS)
 	@echo
 	@echo "Configuring PipeWire..."
 	@echo
-	@pw-metadata -n settings 0 clock.force-quantum 128
+	@pw-metadata -n settings 0 clock.quantum 128
+	@pw-metadata -n settings 0 clock.rate 48000
+	@systemctl --user restart pipewire.service
 	@touch $(STATUS)/pipewire-configured
 
 # apt-updated is used to ensure 'sudo apt update' has been 
@@ -86,22 +88,6 @@ $(STATUS)/apt-updated: $(STATUS)
 	@sudo $(APT) update
 	@touch $(STATUS)/apt-updated
 
-# install calf-plugins with apt
-$(STATUS)/calf-installed: $(STATUS)/apt-updated
-	@echo
-	@echo "Installing 'Calf Studio Gear'..."
-	@echo
-	@sudo $(APT) install -y calf-plugins
-	@touch $(STATUS)/calf-installed
-
-# install Carla with apt
-$(STATUS)/carla-installed: $(STATUS)/apt-updated
-	@echo
-	@echo "Installing 'Carla'..."
-	@echo
-	@sudo $(APT) install -y carla
-	@touch $(STATUS)/carla-installed
-	
 # install dependencies of neural-amp-modeler-lv2
 $(STATUS)/nam-deps: $(STATUS)/apt-updated
 	@echo
@@ -162,7 +148,7 @@ $(STATUS)/nam-ui-installed: $(STATUS)/nam-ui-deps $(STATUS)/nam-installed
 
 
 # build & install GxPlugins.lv2
-$(STATUS)/gxplugins-installed: $(STATUS)/gxplugins-deps
+gxplugins: $(STATUS)/gxplugins-deps
 	@echo
 	@echo "Fetching 'GxPlugins.lv2'..."
 	@echo
@@ -175,33 +161,22 @@ $(STATUS)/gxplugins-installed: $(STATUS)/gxplugins-deps
 	@echo "Installing 'GxPlugins.lv2'..."
 	@echo
 	@$(CD) $(BUILD)/GxPlugins.lv2 ; sudo $(MAKE) install
-	@touch $(STATUS)/gxplugins-installed
-
 
 # SMS-Essentials:
 #  - Neural Amp Modeler with UI installed
 #  - Bunch of NAM Models fetched
 #  - Bunch of Impuse Responses fetched
-#  - GxPlugins installed
-#  - Carla installed
-#  - Calf Studio Gear installed
-#  - PipeWire configured for 128 buffer size
+#  - PipeWire configured for 128@48000
 SMS-Essentials: \
 			$(STATUS)/nam-installed \
 			$(STATUS)/nam-ui-installed \
-			$(STATUS)/carla-installed \
 			$(STATUS)/nam-models-fetched \
 			$(STATUS)/irs-fetched \
-			$(STATUS)/gxplugins-installed \
-			$(STATUS)/calf-installed \
 			$(STATUS)/pipewire-configured
 	@echo
 	@echo "SMS-Essentials Package Installed:"
 	@echo "- Neural Amp Modeler with UI installed"
 	@echo "- Bunch of NAM Models fetched"
-	@echo "- GxPlugins installed"
-	@echo "- Carla installed"
-	@echo "- Calf Studio Gear installed"
 	@echo "- PipeWire configured for 128 buffer size"
 	@echo
 	@echo "If you wish, you can now copy 'NAM_Models' and 'Speaker-Cabinets-IRs' folders"
@@ -219,10 +194,8 @@ SMS-Essentials: \
 $(STATUS)/preset-1-deps: $(STATUS)/audio-dev \
 			$(STATUS)/nam-installed \
 			$(STATUS)/nam-ui-installed \
-			$(STATUS)/carla-installed \
 			$(STATUS)/nam-models-fetched \
 			$(STATUS)/irs-fetched \
-			$(STATUS)/gxplugins-installed \
 			$(STATUS)/pipewire-configured
 	@echo
 	@echo "Creating Carla Preset with"
@@ -230,9 +203,6 @@ $(STATUS)/preset-1-deps: $(STATUS)/audio-dev \
 	@echo "	-> ZamGate"
 	@echo "	-> Neural Amp Modeler (Loaded: 'Helga B 6505+ Red ch - MXR Drive V2', but all models selectable)"
 	@echo "	-> x42 - IR Convolver Mono => Stereo (Loaded: 'GuitarHack Original Edge')"
-	@echo "	-> GxChorus Stereo"
-	@echo "	-> GxDigital Delay Stereo (disabled)"
-	@echo "	-> GxReverb"
 	@echo "YOUR EARS <-"
 	@echo
 	@$(RM) -rf SMS-Demo-Preset-1
@@ -248,10 +218,10 @@ $(STATUS)/preset-1-deps: $(STATUS)/audio-dev \
 	in2=$$(cat $(STATUS)/audio-dev-in2); \
 	out1=$$(cat $(STATUS)/audio-dev-out1); \
 	out2=$$(cat $(STATUS)/audio-dev-out2); \
-	$(SED) -i "s/system:capture_1/$$selectedDevice:$$in1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
-	$(SED) -i "s/system:capture_2/$$selectedDevice:$$in2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
-	$(SED) -i "s/system:playback_1/$$selectedDevice:$$out1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
-	$(SED) -i "s/system:playback_2/$$selectedDevice:$$out2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp;
+	$(SED) -i "s/{CAPTURE_INPUT_1}/$$selectedDevice:$$in1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/{CAPTURE_INPUT_2}/$$selectedDevice:$$in2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/{PLAYBACK_OUTPUT_1}/$$selectedDevice:$$out1/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp; \
+	$(SED) -i "s/{PLAYBACK_OUTPUT_2}/$$selectedDevice:$$out2/g" SMS-Demo-Preset-1/SMS-Demo-Preset-1.carxp;
 	@touch $(STATUS)/preset-1-deps
 	
 SMS-Essentials-Demo: $(STATUS)/preset-1-deps
@@ -262,4 +232,4 @@ clean:
 	@echo "Sweep...sweeeeep... yea sorry just clean it yourself"
 
 	
-.PHONY: clean SMS-Essentials-Demo SMS-Essentials
+.PHONY: clean SMS-Essentials-Demo SMS-Essentials gxplugins
